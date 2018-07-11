@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
 <meta name="HandheldFriendly" content="True"/>
-<title>Prepare Disks</title>
+<title>YKFDE Guide for Arch Linux</title>
     <link rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/cerulean/bootstrap.min.css">
 <link rel="stylesheet"
@@ -400,39 +400,46 @@
 
     </li>
                         <li>
-    <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/arch-linux/">YubiKey full disk encryption Arch Linux guide</a>
+    <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/">YFDE Guides</a>
     
     <ul class="dropdown-menu">
                         <li>
-    <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/arch-linux/getting-started.html">Getting Started</a>
+    <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/">YKFDE Guide for Arch Linux</a>
+    
+    <ul class="dropdown-menu">
+                        <li>
+    <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/getting-started.html">Getting Started</a>
 
     </li>
                         <li>
-    <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/arch-linux/prepare-disk.html">Prepare Disks</a>
+    <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/prepare-disk.html">Prepare Disks</a>
 
     </li>
                         <li>
-    <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/arch-linux/prepare-yubikey.html">Prepare YubiKey</a>
+    <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/prepare-yubikey.html">Prepare YubiKey</a>
 
     </li>
                         <li>
-    <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/arch-linux/prepare-volumes.html">Prepare Volumes</a>
+    <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/prepare-volumes.html">Prepare Volumes</a>
 
     </li>
                         <li>
-    <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/arch-linux/install-arch.html">Install Arch Linux</a>
+    <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/install-arch.html">Install Arch Linux</a>
 
     </li>
                         <li>
-    <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/arch-linux/secure-boot.html">Setup secure boot</a>
+    <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/secure-boot.html">Setup secure boot</a>
 
     </li>
                         <li>
-    <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/arch-linux/yubikey-login.html">Enable YubiKey Login</a>
+    <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/yubikey-login.html">Enable YubiKey Login</a>
 
     </li>
                         <li>
-    <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/arch-linux/minimal-gnome.html">Install minimal GNOME desktop</a>
+    <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/minimal-gnome.html">Install minimal GNOME desktop</a>
+
+    </li>
+            </ul>
 
     </li>
             </ul>
@@ -446,31 +453,17 @@
 </header>
 <div class="container">
     <ol class="breadcrumb">
-                        <li><a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/">YubiKey full disk encryption guide</a></li>
-                                <li><a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/arch-linux/">YubiKey full disk encryption Arch Linux guide</a></li>
-                                <li class="active">Prepare Disks</li>
+                        <li><a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/">YubiKey Full Disk Encryption Guide</a></li>
+                                <li><a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/">YFDE Guides</a></li>
+                                <li class="active">YKFDE Guide for Arch Linux</li>
             </ol>
     <div class="row">
 
-                <div class="col-md-3">
-            <nav class="nav-left hidden-xs hidden-sm" id="sideNav">
-    <ul class="nav nav-stacked" data-spy="affix" data-offset-top="59" role="tablist">
-                                <li>
-                <a href="#3-2" title="Prepare&#x20;Disks">Prepare Disks</a>
-            </li>
-            </ul>
-</nav>
-        </div>
-                <div class="col-md-9">
-<div id="section-main"><h1 id="3-2">Prepare Disks</h1>
-<p>You have <a href="https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system" title="dm-crypt/Encrypting an entire system">different choices</a> to setup encryption.
-This chapter describes <a href="https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Encrypted_boot_partition_.28GRUB.29" title="Encrypted boot partition (GRUB)">LVM on LUKS with encrypted boot partition</a>.</p>
-<p>List your disks with <code>lsblk</code> and run <code>gdisk /dev/[your disk]</code> e.g. <code>gdisk /dev/nvme0n1</code>. You can take a look at the
-<code>gdisk</code> Arch Wiki <a href="https://wiki.archlinux.org/index.php/Fdisk#gdisk">en</a> / <a href="https://wiki.archlinux.de/title/GPT#Partitionieren_mit_gdisk">de</a></p>
-<blockquote>
-<p>It's crucial to use <code>gdisk</code> because GPT is needed for UEFI boot.</p>
-</blockquote>
-</div>        </div>
+                <div class="col-md-12">
+
+<h1>3.1. YKFDE Guide for Arch Linux</h1>
+
+<ul class="list-toc"><li class="list-group-item"><div class="row clearfix"><div class="col-sm-3"><span class="text-number">3.1.1.</span></div><div class="col-sm-9"><a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/getting-started.html#3-1-1">Getting Started</a></div></div></li><li class="list-group-item"><div class="row clearfix"><div class="col-sm-3"><span class="text-number">3.1.2.</span></div><div class="col-sm-9"><a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/prepare-disk.html#3-1-2">Prepare Disks</a></div></div></li><li class="list-group-item"><div class="row clearfix"><div class="col-sm-3"><span class="text-number">3.1.3.</span></div><div class="col-sm-9"><a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/prepare-yubikey.html#3-1-3">Prepare YubiKey</a></div></div></li><li class="list-group-item"><div class="row clearfix"><div class="col-sm-3"><span class="text-number">3.1.4.</span></div><div class="col-sm-9"><a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/prepare-volumes.html#3-1-4">Prepare Volumes</a></div></div></li><li class="list-group-item"><div class="row clearfix"><div class="col-sm-3"><span class="text-number">3.1.5.</span></div><div class="col-sm-9"><a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/install-arch.html#3-1-5">Install Arch Linux</a></div></div></li><li class="list-group-item"><div class="row clearfix"><div class="col-sm-3"><span class="text-number">3.1.6.</span></div><div class="col-sm-9"><a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/secure-boot.html#3-1-6">Setup secure boot</a></div></div></li><li class="list-group-item"><div class="row clearfix"><div class="col-sm-3"><span class="text-number">3.1.7.</span></div><div class="col-sm-9"><a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/yubikey-login.html#3-1-7">Enable YubiKey Login</a></div></div></li><li class="list-group-item"><div class="row clearfix"><div class="col-sm-3"><span class="text-number">3.1.8.</span></div><div class="col-sm-9"><a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/minimal-gnome.html#3-1-8">Install minimal GNOME desktop</a></div></div></li></ul><div id="section-main"></div>        </div>
     </div>
 </div>
 
@@ -479,9 +472,9 @@ This chapter describes <a href="https://wiki.archlinux.org/index.php/Dm-crypt/En
         <div class="container">
             <div class="row">
                 <div class="prev col-xs-6">
-                                            <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/arch-linux/getting-started.html">Previous</a>                                    </div>
+                                            <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/">Previous</a>                                    </div>
                 <div class="next col-xs-6">
-                                            <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/arch-linux/prepare-yubikey.html">Next</a>                                    </div>
+                                            <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/getting-started.html">Next</a>                                    </div>
             </div>
         </div>
     </div>
