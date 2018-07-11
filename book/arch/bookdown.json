@@ -1,5 +1,5 @@
 {
-    "title": "YubiKey full disk encryption Arch Linux guide",
+    "title": "YKFDE Guide for Arch Linux",
     "content": [
         {"getting-started": "01-getting-started.md"},
         {"prepare-disk": "02-prepare-disk.md"},

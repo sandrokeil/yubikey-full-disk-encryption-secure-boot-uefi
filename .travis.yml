@@ -15,7 +15,7 @@ before_script:
 - composer install --prefer-dist --no-interaction --no-progress --no-suggest
 
 script:
-- vendor/bin/bookdown book/bookdown.json --root-href=http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/
+- vendor/bin/bookdown bookdown.json --root-href=http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/
 
 deploy:
   provider: pages

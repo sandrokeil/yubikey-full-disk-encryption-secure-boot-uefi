@@ -1,9 +1,9 @@
 {
-    "title": "YubiKey full disk encryption guide",
+    "title": "YubiKey Full Disk Encryption Guide",
     "content": [
-        {"intro": "../README.md"},
-        {"changelog": "../CHANGELOG.md"},
-        {"arch-linux": "arch/bookdown.json"}
+        {"intro": "README.md"},
+        {"changelog": "CHANGELOG.md"},
+        {"guides": "book/guides/bookdown.json"}
     ],
     "theme": {
         "toc": {
@@ -11,8 +11,8 @@
         }
     },
     "template": "bookdown/themes",
-    "tocDepth": 1,
-    "target": "../html",
+    "tocDepth": 2,
+    "target": "./html",
     "numbering": false,
     "extensions": {
         "commonmark": [

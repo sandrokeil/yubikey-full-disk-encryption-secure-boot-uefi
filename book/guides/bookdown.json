@@ -1,0 +1,21 @@
+{
+    "title": "YFDE Guides",
+    "content": [
+        {"arch-linux": "../arch/bookdown.json"}
+    ],
+    "theme": {
+        "toc": {
+            "collapsibleFromLevel": 1
+        }
+    },
+    "template": "bookdown/themes",
+    "tocDepth": 2,
+    "target": "../html",
+    "numbering": false,
+    "extensions": {
+        "commonmark": [
+            "Webuni\\CommonMark\\TableExtension\\TableExtension",
+            "Webuni\\CommonMark\\AttributesExtension\\AttributesExtension"
+        ]
+    }
+}
