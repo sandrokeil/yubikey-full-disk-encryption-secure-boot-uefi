@@ -4,7 +4,7 @@ sudo: false
 
 env:
   global:
-  - secure: q5/StAQCHjf+Zz0OhdaSU+6UTz/EAVgTFAGcqSa4jVTIgzaJZ5C1ul/E6V9birLPCsGWwhkpJiZQPCHS5tOh25oO2o5Y1nmZ/YalLgotPzgXNKmp8e1e4tp+s3gfQNi43wLL1abdf4EbnqC3AfqAPtA5E+OUSWqAdu0Vu/G2rbU=
+  - secure: Zm2DsIhujHC0dUasj/VYEZeCT0/U7uMbZNddlYNMRNjMFg7i+7oX/FwWrhipmOiXchfAaIYP15Nd8xi43y/Ija+oOe7yX8pHwmm7TYCGk7YrkRS6inHO03PRsbe/74GHphJh6H/jSQwuwSkKaicXh1854r+/yUM8xEsiB9mc+f95Vs7bmMuPvUXpTeRIkArL2VvwF/LumPizknjfU/wgCs9a+mAkUumZljD2LrpFmn7TJWRBhLwh+wVkY/RT9fA3yV7nD+07Zy3DHhbkA/1wsSondyXNGiKrQoc2o9+DFj7Ft8n0lt9XwuNAmEzGSKU7/mZqw6pHEaZ1puzckWR+mEmGi0XXWJrjFxOdTM0Y1IR/gQHOU+r6gDyz6UslIrY3rrcyCuhDkITDsqLeyTL8cmVD6y4/ZcKys90rVA0BSb1q6W3EI5u5/31BQifFEr/3bWzm3uwFWfh7gwPURjj++V+NXzDaR+yOE+F+mfrS7Qrs2DRzqJk2TqNO6UrSrN0MzhUXlTHwku6+e+wec1PKYqBFLHqUg4vNsAsUPN1d6zdq7NAIAouZ3iC0f929HFRY1hKpxXA5EWwlASQczJbpNjsK9KLxbYRQS3EUgJPpIJdcdecW9IpTWzqFUDt1YF4XqInxSLcNLkFvwqrFxsY8dVC+KqsFI2l92tVTJKXjBR0=
 
 matrix:
   fast_finish: true
