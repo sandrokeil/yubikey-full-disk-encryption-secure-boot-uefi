@@ -1,0 +1,28 @@
+{
+    "title": "YubiKey full disk encryption Arch Linux guide",
+    "content": [
+        {"getting-started": "01-getting-started.md"},
+        {"prepare-disk": "02-prepare-disk.md"},
+        {"prepare-yubikey": "03-prepare-yubikey.md"},
+        {"prepare-volumes": "04-prepare-volumes.md"},
+        {"install-arch": "05-install-arch.md"},
+        {"secure-boot": "06-secure-boot.md"},
+        {"yubikey-login": "07-yubikey-login.md"},
+        {"minimal-gnome": "08-minimal-gnome.md"}
+    ],
+    "theme": {
+        "toc": {
+            "collapsibleFromLevel": 1
+        }
+    },
+    "template": "bookdown/themes",
+    "tocDepth": 1,
+    "target": "./html",
+    "numbering": false,
+    "extensions": {
+        "commonmark": [
+            "Webuni\\CommonMark\\TableExtension\\TableExtension",
+            "Webuni\\CommonMark\\AttributesExtension\\AttributesExtension"
+        ]
+    }
+}

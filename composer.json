@@ -1,0 +1,31 @@
+{
+    "name": "sandrokeil/yubikey-full-disk-encryption-secure-boot-uefi",
+    "description": "Tutorial to create full disk encryption with YubiKey, encrypted boot partition and secure boot with UEFI",
+    "type": "library",
+    "license": "BSD-3-Clause",
+    "homepage": "http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/",
+    "authors": [
+        {
+            "name": "Sandro Keil",
+            "email": "social@sandro-keil.de",
+            "homepage": "https://sandro-keil.de"
+        }
+    ],
+    "keywords": [
+        "yubikey",
+        "full-disk-encryption",
+        "2fa",
+        "secure-boot",
+        "uefi",
+        "arch-linux",
+        "luks",
+        "lvm2"
+    ],
+    "require": {
+        "bookdown/bookdown": "^1.1.0",
+        "webuni/commonmark-table-extension": "^0.6.1",
+        "webuni/commonmark-attributes-extension": "^0.5.0"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

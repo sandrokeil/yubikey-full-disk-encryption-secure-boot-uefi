@@ -1,0 +1,23 @@
+{
+    "title": "YubiKey full disk encryption guide",
+    "content": [
+        {"intro": "../README.md"},
+        {"changelog": "../CHANGELOG.md"},
+        {"arch-linux": "arch/bookdown.json"}
+    ],
+    "theme": {
+        "toc": {
+            "collapsibleFromLevel": 1
+        }
+    },
+    "template": "bookdown/themes",
+    "tocDepth": 1,
+    "target": "../html",
+    "numbering": false,
+    "extensions": {
+        "commonmark": [
+            "Webuni\\CommonMark\\TableExtension\\TableExtension",
+            "Webuni\\CommonMark\\AttributesExtension\\AttributesExtension"
+        ]
+    }
+}
