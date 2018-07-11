@@ -1,0 +1,27 @@
+language: php
+dist: trusty
+sudo: false
+
+env:
+  global:
+  - secure: q5/StAQCHjf+Zz0OhdaSU+6UTz/EAVgTFAGcqSa4jVTIgzaJZ5C1ul/E6V9birLPCsGWwhkpJiZQPCHS5tOh25oO2o5Y1nmZ/YalLgotPzgXNKmp8e1e4tp+s3gfQNi43wLL1abdf4EbnqC3AfqAPtA5E+OUSWqAdu0Vu/G2rbU=
+
+matrix:
+  fast_finish: true
+  include:
+  - php: 7.1
+
+before_script:
+- composer install --prefer-dist --no-interaction --no-progress --no-suggest
+
+script:
+- vendor/bin/bookdown book/bookdown.json --root-href=http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  keep-history: true
+  local-dir: html
+  on:
+    branch: master
