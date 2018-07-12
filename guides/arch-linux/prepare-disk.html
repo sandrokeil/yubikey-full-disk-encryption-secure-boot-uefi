@@ -472,12 +472,19 @@
                 <div class="col-md-9">
 <div id="section-main"><h1 id="3-1-2">Prepare Disks</h1>
 <p>You have <a href="https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system" title="dm-crypt/Encrypting an entire system">different choices</a> to setup encryption.
-This chapter describes <a href="https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Encrypted_boot_partition_.28GRUB.29" title="Encrypted boot partition (GRUB)">LVM on LUKS with encrypted boot partition</a>.</p>
+This chapter describes <a href="https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Encrypted_boot_partition_.28GRUB.29" title="Encrypted boot partition (GRUB)">LVM on LUKS with encrypted boot partition</a>.
+Because we want to unlock all volumes at once.</p>
 <p>List your disks with <code>lsblk</code> and run <code>gdisk /dev/[your disk]</code> e.g. <code>gdisk /dev/nvme0n1</code>. You can take a look at the
 <code>gdisk</code> Arch Wiki <a href="https://wiki.archlinux.org/index.php/Fdisk#gdisk">en</a> / <a href="https://wiki.archlinux.de/title/GPT#Partitionieren_mit_gdisk">de</a></p>
 <blockquote>
 <p>It's crucial to use <code>gdisk</code> because GPT is needed for UEFI boot.</p>
 </blockquote>
+<p>Please create 4 partition like described in the Arch Wiki above with <code>gdisk</code>. Use the codes for the partition type.
+Don't format the partitions at this time, we will do it later with the YubiKey.</p>
+<p>The second partition contains the EFI System and must be of type FAT32. Format the second partition e.g. <code>/dev/nvme0n1p2</code> with:</p>
+<pre><code>mkfs.fat -F32 /dev/[your disk partition 2]
+</code></pre>
+<p>The next chapter describes how to prepare the YubiKey.</p>
 </div>        </div>
     </div>
 </div>
