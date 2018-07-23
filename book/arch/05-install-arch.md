@@ -28,12 +28,12 @@ available inside the new system. More on that later.
 
 ```
 cp -r yubikey-full-disk-encryption /mnt/home/
-echo "export YKFDE_CHALLENGE=$YKFDE_CHALLENGE" > /mnt/home/challenge.txt
+echo "export YKFDE_CHALLENGE=$(printf [Your YubiKey password] | sha256sum | awk '{print $1}')" > /mnt/home/challenge.txt
 ```
 
 Copy `/etc/ykde.conf` to `/mnt/home` so you can use this file later in your new environment.  
 
-## Mount `/run`
+## Mount run
 
 When running `grub-mkconfig` you will see the error `/run/lvm/lvmetad.socket: connect failed: No such file or directory`.
 That's why the host `/run` folder must be available inside the `chroot` environment. This is prepared with the following
@@ -65,7 +65,7 @@ make install
 Copy `/home/ykde.conf` to  `/etc/ykde.conf` so you have your previous settings or configure the file as described 
 in [chapter 3 - Prepare YubiKey](03-prepare-yubikey.md). The YubiKey challenge will now be stored in the `ykde.conf` 
 file. The environment variable with the YubiKey challenge is loaded into the environment so it can be set 
-into the `ykde.conf` file with the command `sed`. 
+into the `ykde.conf` file with the command `sed`.
 
 ```
 source /home/challenge.txt
@@ -79,7 +79,6 @@ The next step is to prepare the `mkinitcpio.conf` to encrypt the partition at bo
 `vi /etc/mkinitcpio.conf` and replace the *HOOKS* line with the following content.
 
 > Don't add `encrypt` hook, because we ues ykfde !!!
-
 
 ```
 HOOKS=(base udev autodetect consolefont modconf block keymap lvm2 filesystems fsck keyboard ykfde)
@@ -146,6 +145,54 @@ It should look like this with your UUID of the 3rd partition.
 cryptboot      UUID=434a512a-1b76-449e-8cb0-f93aee46e85c    /crypto_keyfile.bin                    luks
 ```
 
+## Configure ykde.conf
+Open the file with `vi /etc/ykde.conf` and enable/set `YKFDE_LUKS_NAME="cryptlvm"` and  `YKFDE_DISK_UUID=[4th partition UUID]` 
+(replace `[4th partition UUID]` with the UUID of the 4th partition e.g. `a86c6534-6643-4afa-b3ae-c78a0a5dc50f`).
+Feel free to modify it to your needs e.g. enable TRIM (but be warned, there are potential security implications) support.
+It should look something like this
+
+```ini
+# Configuration for yubikey-full-disk-encryption. ("") means an empty value.
+
+### *REQUIRED* ###
+
+# Set to non-empty value to use 'Automatic mode with stored challenge (1FA)'.
+YKFDE_CHALLENGE="8fa0acf6233b92d2d48a30a315cd213748d48f28eaa63d7590509392316b3016"
+
+# Use 'Manual mode with secret challenge (2FA)'.
+YKFDE_CHALLENGE_PASSWORD_NEEDED="1"
+
+# Choose YubiKey slot configured for 'HMAC-SHA1 Challenge-Response' mode. Possible values are "1" or "2".
+YKFDE_CHALLENGE_SLOT="2"
+
+### OPTIONAL ###
+
+# Set partition UUID. Leave empty to use 'cryptdevice' kernel parameter.
+YKFDE_DISK_UUID="a86c6534-6643-4afa-b3ae-c78a0a5dc50f"
+
+# Set LUKS encrypted volume name. Leave empty to use 'cryptdevice' kernel parameter.
+YKFDE_LUKS_NAME="cryptlvm"
+
+# If left empty this will be set as "/dev/disk/by-uuid/$YKFDE_DISK_UUID" -- device to unlock with 'cryptsetup luksOpen'.
+#YKFDE_LUKS_DEV=""
+
+# Optional flags passed to 'cryptsetup luksOpen'. Example: "--allow-discards" for TRIM support. Leave empty to use cryptdevice kernel parameter.
+#YKFDE_LUKS_OPTIONS=""
+
+# Number of times to assemble passphrase and run 'cryptsetup luksOpen'. Defaults to "5".
+#YKFDE_CRYPTSETUP_TRIALS="5"
+
+# Number of seconds to wait for inserting YubiKey, "-1" means 'unlimited'. Defaults to "30".
+#YKFDE_CHALLENGE_YUBIKEY_INSERT_TIMEOUT="30"
+
+# Number of seconds passed to 'sleep' after succesful decryption. Defaults to empty, meaning NO sleep.
+#YKFDE_SLEEP_AFTER_SUCCESSFUL_CRYPTSETUP=""
+
+# Enable verbose output. It will print all secrets to terminal. Use only for debugging.
+#DBG="1"
+```
+
+## Test it
 It's time to check you settings with a graceful reboot. If you have done all things right you will be asked for your 
 boot parition password to see the GRUB boot menu and after that the YubiKey password with YubiKey touch button to unlock 
 the root partition. 

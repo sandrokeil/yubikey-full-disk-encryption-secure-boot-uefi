@@ -1,7 +1,7 @@
 # Prepare YubiKey
 
 Download or mount [yubikey-full-disk-encryption](https://github.com/agherzan/yubikey-full-disk-encryption) and install it
-in your Arch Linux Live environment. This is needed because we will format the 4rd partition with YubiKey.
+in your Arch Linux Live environment. This is needed because we will format the 4th partition with YubiKey.
 
 ## Installation
 Open the *yubikey-full-disk-encryption* folder and run `make`.
@@ -13,7 +13,7 @@ make install
 
 
 ## Prepare 2nd slot
-Now it's time prepare the second slot of our YubiKey for the challenge response authentication. Touch will be also enabled.
+Now it's time to prepare the second slot of our YubiKey for the challenge response authentication. Touch will be also enabled.
 
 ```
 ykpersonalize -v -2 -ochal-resp -ochal-hmac -ohmac-lt64 -ochal-btn-trig -oserial-api-visible
@@ -21,10 +21,10 @@ ykpersonalize -v -2 -ochal-resp -ochal-hmac -ohmac-lt64 -ochal-btn-trig -oserial
 
 ## Configure ykfde
 Open `/etc/ykfde.conf` and set `YKFDE_CHALLENGE_SLOT=2` because we want to use the second slot. 
-Set `YKFDE_CHALLENGE_PASSWORD_NEEDED=1` so it asks for the password (2FA). Feel free to modify it tou your needs 
-e.g. enable TRIM (but be warned, there are potential security implications) support.
+Set `YKFDE_CHALLENGE_PASSWORD_NEEDED=1` so it asks for the password (2FA). Leave other settings as is, it will be changed
+later.
 
-> Please compare it carefully with the latest version you have downloaded.
+> Please compare it carefully with the latest version you have downloaded. 
 
 ```ini
 # Configuration for yubikey-full-disk-encryption. ("") means an empty value.
@@ -70,10 +70,10 @@ YKFDE_CHALLENGE_SLOT="2"
 ## Encrypt 4th partition
 Next step is to format the 4th partition. You can modify the arguments if you know what you are doing. 
 
-> Ensure that you use the 4th partition, replace `[device 4rd partition]` with e.g. `nvme0n1p4`
+> Ensure that you use the 4th partition, replace `[device 4th partition]` with the 4th partition of your device e.g. `nvme0n1p4`
 
 ```
-ykfde-format --cipher aes-xts-plain64 --key-size 512 --hash sha256 --iter-time 5000 --type luks2 /dev/[device 4rd partition]
+ykfde-format --cipher aes-xts-plain64 --key-size 512 --hash sha256 --iter-time 5000 --type luks2 /dev/[device 4th partition]
 ykfde-open -d /dev/[device 4th partition] -n cryptlvm
 ```
 

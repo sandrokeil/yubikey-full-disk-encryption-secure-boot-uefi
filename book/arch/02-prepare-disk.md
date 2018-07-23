@@ -20,7 +20,8 @@ Number  Start (sector)    End (sector)  Size       Code  Name
    4         2461696      2000409230   952.7 GiB   8E00  Linux LVM
 ```
 
-The second partition contains the EFI System and must be of type FAT32. Format the second partition e.g. `/dev/nvme0n1p2` with: 
+The second partition contains the EFI System and must be of type FAT32. 
+Format the second partition (replace `[device 2nd partition]` with the 2nd partition of your device e.g. `/dev/nvme0n1p2`) with: 
 
 ```
 mkfs.fat -F32 /dev/[device 2nd partition]
