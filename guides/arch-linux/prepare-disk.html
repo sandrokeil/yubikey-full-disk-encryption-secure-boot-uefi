@@ -487,7 +487,8 @@ Don't format the partitions at this time, you will do it later with the YubiKey.
    3         1232896         2461695   600.0 MiB   8300  Linux filesystem
    4         2461696      2000409230   952.7 GiB   8E00  Linux LVM
 </code></pre>
-<p>The second partition contains the EFI System and must be of type FAT32. Format the second partition e.g. <code>/dev/nvme0n1p2</code> with:</p>
+<p>The second partition contains the EFI System and must be of type FAT32.
+Format the second partition (replace <code>[device 2nd partition]</code> with the 2nd partition of your device e.g. <code>/dev/nvme0n1p2</code>) with:</p>
 <pre><code>mkfs.fat -F32 /dev/[device 2nd partition]
 </code></pre>
 <p>The next chapter describes how to prepare the YubiKey.</p>
