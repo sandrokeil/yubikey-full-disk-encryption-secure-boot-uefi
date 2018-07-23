@@ -466,12 +466,65 @@
                                 <li>
                 <a href="#3-1-4" title="Prepare&#x20;Volumes">Prepare Volumes</a>
             </li>
+                                <li>
+                <a href="#3-1-4-1" title="Encrypted&#x20;&lt;code&gt;&#x2F;boot&lt;&#x2F;code&gt;&#x20;partition">Encrypted <code>/boot</c...</a>
+            </li>
+                                <li>
+                <a href="#3-1-4-2" title="Keyfile&#x20;for&#x20;initramfs">Keyfile for initramfs</a>
+            </li>
             </ul>
 </nav>
         </div>
                 <div class="col-md-9">
 <div id="section-main"><h1 id="3-1-4">Prepare Volumes</h1>
-<p>TBD</p>
+<p>Please take a look at the Arch Wiki page <a href="https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Preparing_the_logical_volumes" title="preparing the logical volumes">Preparing the logical volumes</a>
+to create <code>/</code> and <code>/home</code> directory/partitions. In short you do this (without swap).</p>
+<blockquote>
+<p>The filesystem <em>ext4</em> is used.</p>
+</blockquote>
+<pre><code>pvcreate /dev/mapper/cryptlvm
+vgcreate MyVolGroup /dev/mapper/cryptlvm
+
+lvcreate -L 30G MyVolGroup -n root
+lvcreate -l 100%FREE MyVolGroup -n home
+
+mkfs.ext4 /dev/MyVolGroup/root
+mkfs.ext4 /dev/MyVolGroup/home
+
+mount /dev/MyVolGroup/root /mnt
+mkdir /mnt/home
+mount /dev/MyVolGroup/home /mnt/home
+</code></pre>
+<h2 id="3-1-4-1">Encrypted <code>/boot</code> partition</h2>
+<p>The last volume is <code>/boot</code> which should also be encrypted. We can not use a YubiKey here, but it is protected with a password.
+The Arch Wiki page <a href="https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Preparing_the_boot_partition_5" title="Preparing the boot partition">Preparing the boot partition</a>
+describes this in more detail. The <code>efi</code> partition will be mounted to <code>/boot/efi</code>.</p>
+<blockquote>
+<p>Be aware, GRUB boot loader uses US keyboad layout. Consider this for your password!</p>
+</blockquote>
+<p>Execute the following commands and replace <code>[device 3rd partition]</code> with the 3rd partition of your device e.g. <code>nvme0n1p3</code>
+and replace <code>[device 2nd partition]</code> with the 2nd partition of your device e.g. <code>nvme0n1p2</code>.</p>
+<pre><code>cryptsetup luksFormat /dev/[device 3rd partition]
+cryptsetup open /dev/[device 3rd partition] cryptboot
+
+ls /dev/mapper
+
+mkfs.ext4 /dev/mapper/cryptboot
+
+mkdir /mnt/boot
+mount /dev/mapper/cryptboot /mnt/boot
+
+mkdir /mnt/boot/efi
+mount /dev/[device 2nd partition] /mnt/boot/efi
+</code></pre>
+<h2 id="3-1-4-2">Keyfile for initramfs</h2>
+<p><a href="https://wiki.archlinux.org/index.php/Dm-crypt/Device_encryption#With_a_keyfile_embedded_in_the_initramfs" title="With a keyfile embedded in the initramfs">With a keyfile embedded in the initramfs</a>
+we don't have to unlock the <code>/boot</code> partition twice. The <code>/boot</code> partition will be mounted if the system starts, so updates can be performed.</p>
+<p>Create a randomized generated key file with the following lines and add this keyfile to the 3rd LUKS partition (replace <code>[device 3rd partition]</code> with e.g. <code>nvme0n1p3</code>).</p>
+<pre><code>dd bs=512 count=4 if=/dev/urandom of=/mnt/crypto_keyfile.bin
+chmod 000 /mnt/crypto_keyfile.bin
+cryptsetup luksAddKey /dev/[device 3rd partition] /mnt/crypto_keyfile.bin
+</code></pre>
 </div>        </div>
     </div>
 </div>

@@ -471,14 +471,14 @@
         </div>
                 <div class="col-md-9">
 <div id="section-main"><h1 id="3-1-1">Getting Started</h1>
-<p>For common stuff, the Arch Wiki is a good starting point. We need a bootable Arch Linux medium. Please take a look
-at the Arch Installtion Guide <a href="https://wiki.archlinux.org/index.php/installation_guide#Pre-installation" title="Download and boot the installation medium">en</a> / <a href="https://wiki.archlinux.de/title/Anleitung_f%C3%BCr_Einsteiger#Das_neueste_ISO-Abbild_beziehen" title="Das neueste ISO-Abbild beziehen">de</a>.</p>
+<p>For common stuff, the Arch Wiki is a good starting point. You need a bootable Arch Linux medium. Please take a look
+at the Arch installation guide <a href="https://wiki.archlinux.org/index.php/installation_guide#Pre-installation" title="Download and boot the installation medium">en</a> / <a href="https://wiki.archlinux.de/title/Anleitung_f%C3%BCr_Einsteiger#Das_neueste_ISO-Abbild_beziehen" title="Das neueste ISO-Abbild beziehen">de</a>.</p>
 <p>Ok, you've create a bootable Arch Linux medium, now it's time to boot into the Arch Linux UEFI system.</p>
 <p>German users should execute <code>loadkeys de</code> (QWERTZ keyboard layout) in the tty prompt first.</p>
-<p>Let's install minimal packages to get started with our full disk encryption with YubiKey.</p>
+<p>Let's install minimal packages to get started of full disk encryption with YubiKey.</p>
 <pre><code>pacman -Sy yubikey-manager yubikey-personalization pcsc-tools libu2f-host make json-c cryptsetup
 </code></pre>
-<p>Now we must start the <a href="https://wiki.archlinux.org/index.php/Smartcards" title="Smartcards">smartcard service</a></p>
+<p>Now start the <a href="https://wiki.archlinux.org/index.php/Smartcards" title="Smartcards">smartcard service</a></p>
 <pre><code>systemctl start pcscd.service
 </code></pre>
 <p>and our connected YubiKey should be listed with</p>

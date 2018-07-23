@@ -480,7 +480,7 @@ Because we want to unlock all volumes at once.</p>
 <p>It's crucial to use <code>gdisk</code> because GPT is needed for UEFI boot.</p>
 </blockquote>
 <p>Please create 4 partition like described in the Arch Wiki above with <code>gdisk</code>. Use the codes for the partition type.
-Don't format the partitions at this time, we will do it later with the YubiKey. It should look similar like this.</p>
+Don't format the partitions at this time, you will do it later with the YubiKey. It should look similar like this.</p>
 <pre><code>Number  Start (sector)    End (sector)  Size       Code  Name
    1            2048            4095   1024.0 KiB  EF02  BIOS boot partition
    2            4096         1232895   600.0 MiB   EF00  EFI System
@@ -488,7 +488,7 @@ Don't format the partitions at this time, we will do it later with the YubiKey. 
    4         2461696      2000409230   952.7 GiB   8E00  Linux LVM
 </code></pre>
 <p>The second partition contains the EFI System and must be of type FAT32. Format the second partition e.g. <code>/dev/nvme0n1p2</code> with:</p>
-<pre><code>mkfs.fat -F32 /dev/[disk 2nd partition]
+<pre><code>mkfs.fat -F32 /dev/[device 2nd partition]
 </code></pre>
 <p>The next chapter describes how to prepare the YubiKey.</p>
 </div>        </div>

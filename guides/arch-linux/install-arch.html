@@ -466,12 +466,136 @@
                                 <li>
                 <a href="#3-1-5" title="Install&#x20;Arch&#x20;Linux">Install Arch Linux</a>
             </li>
+                                <li>
+                <a href="#3-1-5-1" title="Basic&#x20;stuff">Basic stuff</a>
+            </li>
+                                <li>
+                <a href="#3-1-5-2" title="Generate&#x20;fstab">Generate fstab</a>
+            </li>
+                                <li>
+                <a href="#3-1-5-3" title="YubiKey&#x20;Full&#x20;Disk&#x20;Encryption">YubiKey Full Disk Encryp...</a>
+            </li>
+                                <li>
+                <a href="#3-1-5-4" title="Mount&#x20;&lt;code&gt;&#x2F;run&lt;&#x2F;code&gt;&#x0A;">Mount <code>/run</code>
+</a>
+            </li>
+                                <li>
+                <a href="#3-1-5-5" title="chroot">chroot</a>
+            </li>
+                                <li>
+                <a href="#3-1-5-6" title="mkinitcpio">mkinitcpio</a>
+            </li>
+                                <li>
+                <a href="#3-1-5-7" title="GRUB">GRUB</a>
+            </li>
+                                <li>
+                <a href="#3-1-5-8" title="Generate&#x20;initramfs">Generate initramfs</a>
+            </li>
             </ul>
 </nav>
         </div>
                 <div class="col-md-9">
 <div id="section-main"><h1 id="3-1-5">Install Arch Linux</h1>
-<p>TBD</p>
+<p>This chapter describes how to install a minimal Arch Linux. You will find an appropriated page in the Arch Wiki
+<a href="https://wiki.archlinux.org/index.php/installation_guide">en</a> / <a href="https://wiki.archlinux.de/title/Anleitung_f%C3%BCr_Einsteiger">de</a>.</p>
+<h2 id="3-1-5-1">Basic stuff</h2>
+<p>The <em>base</em> package and some additional packages for the YubiKey and full disk encryption will be installed to the <code>/mnt</code> folder.
+If you want to know more about the individual package, please take a look at the <a href="https://www.archlinux.org/packages/">Arch package site</a>.</p>
+<pre><code>pacstrap /mnt base yubikey-manager yubikey-personalization pcsc-tools libu2f-host acpid dbus grub-efi-x86_64 efibootmgr lvm2
+</code></pre>
+<h2 id="3-1-5-2">Generate fstab</h2>
+<p>The following command will generate the <em>fstab</em> entries of the currently mounted partitions.</p>
+<pre><code>genfstab -U -p /mnt &gt;&gt; /mnt/etc/fstab
+</code></pre>
+<p>Check it out with <code>cat /mnt/etc/fstab</code> and verify it.</p>
+<h2 id="3-1-5-3">YubiKey Full Disk Encryption</h2>
+<p>Next step is to copy the <a href="https://github.com/agherzan/yubikey-full-disk-encryption">yubikey-full-disk-encryption</a> folder
+to the <code>/mnt</code> folder because it will be installed later. The YubiKey challenge is stored in a file to make it
+available inside the new system. More on that later.</p>
+<pre><code>cp -r yubikey-full-disk-encryption /mnt/home/
+echo "export YKFDE_CHALLENGE=$YKFDE_CHALLENGE" &gt; /mnt/home/challenge.txt
+</code></pre>
+<p>Copy <code>/etc/ykde.conf</code> to <code>/mnt/home</code> so you can use this file later in your new environment.</p>
+<h2 id="3-1-5-4">Mount <code>/run</code>
+</h2>
+<p>When running <code>grub-mkconfig</code> you will see the error <code>/run/lvm/lvmetad.socket: connect failed: No such file or directory</code>.
+That's why the host <code>/run</code> folder must be available inside the <code>chroot</code> environment. This is prepared with the following
+lines and finished later on.</p>
+<pre><code>mkdir /mnt/hostrun/
+mount --bind /run /mnt/hostrun
+</code></pre>
+<h2 id="3-1-5-5">chroot</h2>
+<p>It's time to switch into your new system with <code>arch-chroot /mnt</code> and prepare some stuff. After successfully changed root to
+the new system, execute the following lines to make the hosts <em>lvm</em> available here for <code>grub-mkconfig</code>.</p>
+<pre><code>mkdir /run/lvm
+mount --bind /hostrun/lvm /run/lvm
+</code></pre>
+<p>Next step is to install the <em>yubikey-full-disk-encryption</em> helper scripts. If they are not already copied in your home
+folder, you can it download from the GitHub repository <a href="https://github.com/agherzan/yubikey-full-disk-encryption">yubikey-full-disk-encryption</a>.</p>
+<pre><code>cd /home/yubikey-full-disk-encryption
+make install
+</code></pre>
+<p>Copy <code>/home/ykde.conf</code> to  <code>/etc/ykde.conf</code> so you have your previous settings or configure the file as described
+in <a href="03-prepare-yubikey.html">chapter 3 - Prepare YubiKey</a>. The YubiKey challenge will now be stored in the <code>ykde.conf</code>
+file. The environment variable with the YubiKey challenge is loaded into the environment so it can be set
+into the <code>ykde.conf</code> file with the command <code>sed</code>.</p>
+<pre><code>source /home/challenge.txt
+sed -i "s/#YKFDE_CHALLENGE=/YKFDE_CHALLENGE=$YKFDE_CHALLENGE/g" /etc/ykde.conf
+</code></pre>
+<p>Check that the YubiKey challenge was successfully saved to <code>/etc/ykde.conf</code> with <code>cat /etc/ykde.conf</code>.</p>
+<h2 id="3-1-5-6">mkinitcpio</h2>
+<p>The next step is to prepare the <code>mkinitcpio.conf</code> to encrypt the partition at boot. Open the file with
+<code>vi /etc/mkinitcpio.conf</code> and replace the <em>HOOKS</em> line with the following content.</p>
+<blockquote>
+<p>Don't add <code>encrypt</code> hook, because we ues ykfde !!!</p>
+</blockquote>
+<pre><code>HOOKS=(base udev autodetect consolefont modconf block keymap lvm2 filesystems fsck keyboard ykfde)
+</code></pre>
+<p>Additionally the <em>ext4</em> module is needed. Add <em>ext4</em> to the <em>MODULES</em>. It should look like this line:</p>
+<pre><code>MODULES=(ext4)
+</code></pre>
+<h2 id="3-1-5-7">GRUB</h2>
+<p>The next part is a bit tricky, because you have to figure out the correct device UUIDs. First, get a list of your device
+IDs with <code>lsblk -f</code> it should look something like this:</p>
+<pre><code>NAME                  FSTYPE      LABEL UUID                                   MOUNTPOINT
+nvme0n1                                                                        
+├─nvme0n1p1                                                                    
+├─nvme0n1p2           vfat              AB24-1550                              /boot/efi
+├─nvme0n1p3           crypto_LUKS       434a512a-1b76-449e-8cb0-f93aee46e85c   
+│ └─cryptboot         ext4              5fe2b9c5-ac2b-4f6e-8f3e-5e45c45d0b02   /boot
+└─nvme0n1p4           crypto_LUKS       a86c6534-6643-4afa-b3ae-c78a0a5dc50f   
+  └─cryptlvm          LVM2_member       heTIE6-0pLH-8J8Y-67T7-1vPW-4f1V-SqHeOA 
+    ├─MyVolGroup-root ext4              49a833a2-4a3b-4a1b-a7d9-75ab50910a8e   /
+    └─MyVolGroup-home ext4              ec626537-c6a5-4df9-9ad9-3a344bc8c86f   /home
+</code></pre>
+<p>You will need the UUID from the <em>device 4th partition</em> (in this example <em>a86c6534-6643-4afa-b3ae-c78a0a5dc50f</em>) and the
+UUID of <em>MyVolGroup-root</em> (in this example <em>49a833a2-4a3b-4a1b-a7d9-75ab50910a8e</em>). Open the GRUB config file with <code>vi /etc/default/grub</code>
+and add these two lines with your UUIDs.</p>
+<pre><code>GRUB_CMDLINE_LINUX="cryptdevice=UUID=[4th partition UUID]:cryptlvm root=UUID=[MyVolGroup-root UUID]"
+GRUB_ENABLE_CRYPTODISK=y
+</code></pre>
+<p>Finally the <em>GRUB_CMDLINE_LINUX</em> line should look like this line with your UUIDs.</p>
+<pre><code>GRUB_CMDLINE_LINUX="cryptdevice=UUID=a86c6534-6643-4afa-b3ae-c78a0a5dc50f:cryptlvm root=UUID=49a833a2-4a3b-4a1b-a7d9-75ab50910a8e"
+</code></pre>
+<h2 id="3-1-5-8">Generate initramfs</h2>
+<p>The last step is to generate a new <em>initramfs</em> and the GRUB boot loader. The first one is done with <code>mkinitcpio -p linux</code>
+and the second one with the following lines (replace <code>[your device]</code> with your device e.g. <code>nvme0n1</code>):</p>
+<pre><code>grub-install --target=i386-pc --recheck /dev/[your device]
+grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --recheck
+grub-mkconfig -o /boot/grub/grub.cfg
+</code></pre>
+<p>Add the <code>crypto_keyfile.bin</code> to the <em>crypttab</em>, otherwise you have to unlock the boot partition twice. Open the file with
+<code>vi /etc/crypttab</code> and add the following line (replace <code>[UUID 3rd partition]</code> with the UUID of the 3rd partition e.g. <code>434a512a-1b76-449e-8cb0-f93aee46e85c</code>).</p>
+<pre><code>cryptboot      UUID=[UUID 3rd partition]    /crypto_keyfile.bin                    luks
+</code></pre>
+<p>It should look like this with your UUID of the 3rd partition.</p>
+<pre><code>cryptboot      UUID=434a512a-1b76-449e-8cb0-f93aee46e85c    /crypto_keyfile.bin                    luks
+</code></pre>
+<p>It's time to check you settings with a graceful reboot. If you have done all things right you will be asked for your
+boot parition password to see the GRUB boot menu and after that the YubiKey password with YubiKey touch button to unlock
+the root partition.</p>
+<p>Good luck! Don't worry if something doesn't work, simply boot from the Arch Linux medium, install the necessary software
+to mount your encrypted partitions and check the configs. Maybe an UUID is wrong.</p>
 </div>        </div>
     </div>
 </div>

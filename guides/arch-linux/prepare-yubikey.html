@@ -466,6 +466,18 @@
                                 <li>
                 <a href="#3-1-3" title="Prepare&#x20;YubiKey">Prepare YubiKey</a>
             </li>
+                                <li>
+                <a href="#3-1-3-1" title="Installation">Installation</a>
+            </li>
+                                <li>
+                <a href="#3-1-3-2" title="Prepare&#x20;2nd&#x20;slot">Prepare 2nd slot</a>
+            </li>
+                                <li>
+                <a href="#3-1-3-3" title="Configure&#x20;ykfde">Configure ykfde</a>
+            </li>
+                                <li>
+                <a href="#3-1-3-4" title="Encrypt&#x20;4th&#x20;partition">Encrypt 4th partition</a>
+            </li>
             </ul>
 </nav>
         </div>
@@ -473,13 +485,16 @@
 <div id="section-main"><h1 id="3-1-3">Prepare YubiKey</h1>
 <p>Download or mount <a href="https://github.com/agherzan/yubikey-full-disk-encryption">yubikey-full-disk-encryption</a> and install it
 in your Arch Linux Live environment. This is needed because we will format the 4rd partition with YubiKey.</p>
-<p>Open the yubikey-full-disk-encryption folder and run <code>make</code>.</p>
+<h2 id="3-1-3-1">Installation</h2>
+<p>Open the <em>yubikey-full-disk-encryption</em> folder and run <code>make</code>.</p>
 <pre><code>cd yubikey-full-disk-encryption
 make install
 </code></pre>
+<h2 id="3-1-3-2">Prepare 2nd slot</h2>
 <p>Now it's time prepare the second slot of our YubiKey for the challenge response authentication. Touch will be also enabled.</p>
 <pre><code>ykpersonalize -v -2 -ochal-resp -ochal-hmac -ohmac-lt64 -ochal-btn-trig -oserial-api-visible
 </code></pre>
+<h2 id="3-1-3-3">Configure ykfde</h2>
 <p>Open <code>/etc/ykfde.conf</code> and set <code>YKFDE_CHALLENGE_SLOT=2</code> because we want to use the second slot.
 Set <code>YKFDE_CHALLENGE_PASSWORD_NEEDED=1</code> so it asks for the password (2FA). Feel free to modify it tou your needs
 e.g. enable TRIM (but be warned, there are potential security implications) support.</p>
@@ -525,17 +540,15 @@ YKFDE_CHALLENGE_SLOT="2"
 # Enable verbose output. It will print all secrets to terminal. Use only for debugging.
 #DBG="1"
 </code></pre>
-<p>Next step is to format the 4rd partition. You can modify the arguments if you know what you are doing.
-Ensure that you use the 4rd partition e.g. <code>nvme0n1p4</code></p>
+<h2 id="3-1-3-4">Encrypt 4th partition</h2>
+<p>Next step is to format the 4th partition. You can modify the arguments if you know what you are doing.</p>
+<blockquote>
+<p>Ensure that you use the 4th partition, replace <code>[device 4rd partition]</code> with e.g. <code>nvme0n1p4</code></p>
+</blockquote>
 <pre><code>ykfde-format --cipher aes-xts-plain64 --key-size 512 --hash sha256 --iter-time 5000 --type luks2 /dev/[device 4rd partition]
-ykfde-open -d /dev/[device 4rd partition] -n cryptlvm
+ykfde-open -d /dev/[device 4th partition] -n cryptlvm
 </code></pre>
-<p>Display the crypt volume with <code>ls /dev/mapper</code>. Next step is to <a href="https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Preparing_the_logical_volumes" title="preparing the logical volumes">preparing the logical volumes</a>
-for <code>/</code> and <code>/home</code> directory.</p>
-<pre><code>mount /dev/MyVolGroup/root /mnt
-mkdir /mnt/home
-mount /dev/MyVolGroup/home /mnt/home
-</code></pre>
+<p>Display the crypt volume with <code>ls -la /dev/mapper/</code>. Next step is to prepare the logical volumes.</p>
 </div>        </div>
     </div>
 </div>
