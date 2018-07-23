@@ -10,7 +10,7 @@ List your disks with `lsblk` and run `gdisk /dev/[your disk]` e.g. `gdisk /dev/n
 > It's crucial to use `gdisk` because GPT is needed for UEFI boot.
 
 Please create 4 partition like described in the Arch Wiki above with `gdisk`. Use the codes for the partition type.
-Don't format the partitions at this time, we will do it later with the YubiKey. It should look similar like this.
+Don't format the partitions at this time, you will do it later with the YubiKey. It should look similar like this.
 
 ```
 Number  Start (sector)    End (sector)  Size       Code  Name
@@ -23,7 +23,7 @@ Number  Start (sector)    End (sector)  Size       Code  Name
 The second partition contains the EFI System and must be of type FAT32. Format the second partition e.g. `/dev/nvme0n1p2` with: 
 
 ```
-mkfs.fat -F32 /dev/[disk 2nd partition]
+mkfs.fat -F32 /dev/[device 2nd partition]
 ```
 
 The next chapter describes how to prepare the YubiKey.

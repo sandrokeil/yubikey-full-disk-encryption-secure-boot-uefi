@@ -3,19 +3,23 @@
 Download or mount [yubikey-full-disk-encryption](https://github.com/agherzan/yubikey-full-disk-encryption) and install it
 in your Arch Linux Live environment. This is needed because we will format the 4rd partition with YubiKey.
 
-Open the yubikey-full-disk-encryption folder and run `make`.
+## Installation
+Open the *yubikey-full-disk-encryption* folder and run `make`.
 
 ```
 cd yubikey-full-disk-encryption
 make install
 ```
 
+
+## Prepare 2nd slot
 Now it's time prepare the second slot of our YubiKey for the challenge response authentication. Touch will be also enabled.
 
 ```
 ykpersonalize -v -2 -ochal-resp -ochal-hmac -ohmac-lt64 -ochal-btn-trig -oserial-api-visible
 ```
 
+## Configure ykfde
 Open `/etc/ykfde.conf` and set `YKFDE_CHALLENGE_SLOT=2` because we want to use the second slot. 
 Set `YKFDE_CHALLENGE_PASSWORD_NEEDED=1` so it asks for the password (2FA). Feel free to modify it tou your needs 
 e.g. enable TRIM (but be warned, there are potential security implications) support.
@@ -63,19 +67,14 @@ YKFDE_CHALLENGE_SLOT="2"
 #DBG="1"
 ```
 
-Next step is to format the 4rd partition. You can modify the arguments if you know what you are doing. 
-Ensure that you use the 4rd partition e.g. `nvme0n1p4`
+## Encrypt 4th partition
+Next step is to format the 4th partition. You can modify the arguments if you know what you are doing. 
+
+> Ensure that you use the 4th partition, replace `[device 4rd partition]` with e.g. `nvme0n1p4`
 
 ```
 ykfde-format --cipher aes-xts-plain64 --key-size 512 --hash sha256 --iter-time 5000 --type luks2 /dev/[device 4rd partition]
-ykfde-open -d /dev/[device 4rd partition] -n cryptlvm
+ykfde-open -d /dev/[device 4th partition] -n cryptlvm
 ```
 
-Display the crypt volume with `ls /dev/mapper`. Next step is to [preparing the logical volumes](https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Preparing_the_logical_volumes "preparing the logical volumes")
-for `/` and `/home` directory.
-
-```
-mount /dev/MyVolGroup/root /mnt
-mkdir /mnt/home
-mount /dev/MyVolGroup/home /mnt/home
-```
+Display the crypt volume with `ls -la /dev/mapper/`. Next step is to prepare the logical volumes.

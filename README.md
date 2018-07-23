@@ -17,6 +17,11 @@ It took me several days to figure out how to set up a fully encrypted machine wi
 others to get it done in minutes (hopefully). There exists a plenty bunch of tutorials but no one contains a step-by-step 
 guide to get the above things done.
 
+## Prerequisites
+You should be familiar with linux and should be able to edit files with `vi` [Vi Cheat Sheet](http://www.lagmonster.org/docs/vi.html).
+You need an USB stick for the Linux Live environment and a second computer would be useful for look ups and to read this guide while
+preparing your fully encrypted Linux.
+
 ## Documentation
 
 For the latest online documentation visit [http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/](http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/ "Latest yubikey-full-disk-encryption-secure-boot-uefi documentation").
