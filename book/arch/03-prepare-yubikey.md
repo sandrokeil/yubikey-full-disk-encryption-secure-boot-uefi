@@ -13,7 +13,7 @@ make install
 
 
 ## Prepare 2nd slot
-Now it's time to prepare the second slot of our YubiKey for the challenge response authentication. Touch will be also enabled.
+Now it's time to prepare the second slot of your YubiKey for the challenge response authentication. Touch will be also enabled.
 
 ```
 ykpersonalize -v -2 -ochal-resp -ochal-hmac -ohmac-lt64 -ochal-btn-trig -oserial-api-visible

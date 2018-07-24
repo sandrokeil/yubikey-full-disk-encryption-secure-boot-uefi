@@ -7,8 +7,7 @@
         {"prepare-volumes": "04-prepare-volumes.md"},
         {"install-arch": "05-install-arch.md"},
         {"secure-boot": "06-secure-boot.md"},
-        {"yubikey-login": "07-yubikey-login.md"},
-        {"minimal-gnome": "08-minimal-gnome.md"}
+        {"yubikey-login": "07-yubikey-login.md"}
     ],
     "theme": {
         "toc": {

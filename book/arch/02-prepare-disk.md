@@ -27,4 +27,4 @@ Format the second partition (replace `[device 2nd partition]` with the 2nd parti
 mkfs.fat -F32 /dev/[device 2nd partition]
 ```
 
-The next chapter describes how to prepare the YubiKey.
+Great, one step closer for your fully encrypted system. The next chapter describes how to prepare the YubiKey.

@@ -24,7 +24,7 @@ Check it out with `cat /mnt/etc/fstab` and verify it.
 ## YubiKey Full Disk Encryption
 Next step is to copy the [yubikey-full-disk-encryption](https://github.com/agherzan/yubikey-full-disk-encryption) folder
 to the `/mnt` folder because it will be installed later. The YubiKey challenge is stored in a file to make it
-available inside the new system. More on that later.
+available inside the new system. More on that later. Replace `[Your YubiKey password]` with your YubiKey password.
 
 ```
 cp -r yubikey-full-disk-encryption /mnt/home/
@@ -33,7 +33,7 @@ echo "export YKFDE_CHALLENGE=$(printf [Your YubiKey password] | sha256sum | awk 
 
 Copy `/etc/ykde.conf` to `/mnt/home` so you can use this file later in your new environment.  
 
-## Mount run
+## Mount run folder
 
 When running `grub-mkconfig` you will see the error `/run/lvm/lvmetad.socket: connect failed: No such file or directory`.
 That's why the host `/run` folder must be available inside the `chroot` environment. This is prepared with the following
@@ -63,7 +63,7 @@ make install
 ```
 
 Copy `/home/ykde.conf` to  `/etc/ykde.conf` so you have your previous settings or configure the file as described 
-in [chapter 3 - Prepare YubiKey](03-prepare-yubikey.md). The YubiKey challenge will now be stored in the `ykde.conf` 
+in chapter *Prepare YubiKey*. The YubiKey challenge will now be stored in the `ykde.conf` 
 file. The environment variable with the YubiKey challenge is loaded into the environment so it can be set 
 into the `ykde.conf` file with the command `sed`.
 
@@ -78,7 +78,7 @@ Check that the YubiKey challenge was successfully saved to `/etc/ykde.conf` with
 The next step is to prepare the `mkinitcpio.conf` to encrypt the partition at boot. Open the file with 
 `vi /etc/mkinitcpio.conf` and replace the *HOOKS* line with the following content.
 
-> Don't add `encrypt` hook, because we ues ykfde !!!
+> Don't add `encrypt` hook, because we ues ykfde and respect the order !!!
 
 ```
 HOOKS=(base udev autodetect consolefont modconf block keymap lvm2 filesystems fsck keyboard ykfde)
@@ -199,3 +199,6 @@ the root partition.
 
 Good luck! Don't worry if something doesn't work, simply boot from the Arch Linux medium, install the necessary software 
 to mount your encrypted partitions and check the configs. Maybe an UUID is wrong.
+
+Now you can setup your Arch Linux e.g. create own user or add additional stuff [en](https://wiki.archlinux.org/index.php/installation_guide) / [de](https://wiki.archlinux.de/title/Anleitung_f%C3%BCr_Einsteiger).
+The next chapter describes how to setup UEFI secure boot. The last piece to bullet proof your full disk encryption.
