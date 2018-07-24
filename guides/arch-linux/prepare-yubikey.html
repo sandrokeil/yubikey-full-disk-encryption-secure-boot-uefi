@@ -435,10 +435,6 @@
     <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/yubikey-login.html">Enable YubiKey Login</a>
 
     </li>
-                        <li>
-    <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/minimal-gnome.html">Install minimal GNOME desktop</a>
-
-    </li>
             </ul>
 
     </li>
@@ -491,7 +487,7 @@ in your Arch Linux Live environment. This is needed because we will format the 4
 make install
 </code></pre>
 <h2 id="3-1-3-2">Prepare 2nd slot</h2>
-<p>Now it's time to prepare the second slot of our YubiKey for the challenge response authentication. Touch will be also enabled.</p>
+<p>Now it's time to prepare the second slot of your YubiKey for the challenge response authentication. Touch will be also enabled.</p>
 <pre><code>ykpersonalize -v -2 -ochal-resp -ochal-hmac -ohmac-lt64 -ochal-btn-trig -oserial-api-visible
 </code></pre>
 <h2 id="3-1-3-3">Configure ykfde</h2>

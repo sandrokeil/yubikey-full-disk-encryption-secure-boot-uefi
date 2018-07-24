@@ -435,10 +435,6 @@
     <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/yubikey-login.html">Enable YubiKey Login</a>
 
     </li>
-                        <li>
-    <a href="http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/minimal-gnome.html">Install minimal GNOME desktop</a>
-
-    </li>
             </ul>
 
     </li>
@@ -476,7 +472,7 @@
                 <a href="#3-1-5-3" title="YubiKey&#x20;Full&#x20;Disk&#x20;Encryption">YubiKey Full Disk Encryp...</a>
             </li>
                                 <li>
-                <a href="#3-1-5-4" title="Mount&#x20;run">Mount run</a>
+                <a href="#3-1-5-4" title="Mount&#x20;run&#x20;folder">Mount run folder</a>
             </li>
                                 <li>
                 <a href="#3-1-5-5" title="chroot">chroot</a>
@@ -516,12 +512,12 @@ If you want to know more about the individual package, please take a look at the
 <h2 id="3-1-5-3">YubiKey Full Disk Encryption</h2>
 <p>Next step is to copy the <a href="https://github.com/agherzan/yubikey-full-disk-encryption">yubikey-full-disk-encryption</a> folder
 to the <code>/mnt</code> folder because it will be installed later. The YubiKey challenge is stored in a file to make it
-available inside the new system. More on that later.</p>
+available inside the new system. More on that later. Replace <code>[Your YubiKey password]</code> with your YubiKey password.</p>
 <pre><code>cp -r yubikey-full-disk-encryption /mnt/home/
 echo "export YKFDE_CHALLENGE=$(printf [Your YubiKey password] | sha256sum | awk '{print $1}')" &gt; /mnt/home/challenge.txt
 </code></pre>
 <p>Copy <code>/etc/ykde.conf</code> to <code>/mnt/home</code> so you can use this file later in your new environment.</p>
-<h2 id="3-1-5-4">Mount run</h2>
+<h2 id="3-1-5-4">Mount run folder</h2>
 <p>When running <code>grub-mkconfig</code> you will see the error <code>/run/lvm/lvmetad.socket: connect failed: No such file or directory</code>.
 That's why the host <code>/run</code> folder must be available inside the <code>chroot</code> environment. This is prepared with the following
 lines and finished later on.</p>
@@ -540,7 +536,7 @@ folder, you can it download from the GitHub repository <a href="https://github.c
 make install
 </code></pre>
 <p>Copy <code>/home/ykde.conf</code> to  <code>/etc/ykde.conf</code> so you have your previous settings or configure the file as described
-in <a href="03-prepare-yubikey.html">chapter 3 - Prepare YubiKey</a>. The YubiKey challenge will now be stored in the <code>ykde.conf</code>
+in chapter <em>Prepare YubiKey</em>. The YubiKey challenge will now be stored in the <code>ykde.conf</code>
 file. The environment variable with the YubiKey challenge is loaded into the environment so it can be set
 into the <code>ykde.conf</code> file with the command <code>sed</code>.</p>
 <pre><code>source /home/challenge.txt
@@ -551,7 +547,7 @@ sed -i "s/#YKFDE_CHALLENGE=/YKFDE_CHALLENGE=$YKFDE_CHALLENGE/g" /etc/ykde.conf
 <p>The next step is to prepare the <code>mkinitcpio.conf</code> to encrypt the partition at boot. Open the file with
 <code>vi /etc/mkinitcpio.conf</code> and replace the <em>HOOKS</em> line with the following content.</p>
 <blockquote>
-<p>Don't add <code>encrypt</code> hook, because we ues ykfde !!!</p>
+<p>Don't add <code>encrypt</code> hook, because we ues ykfde and respect the order !!!</p>
 </blockquote>
 <pre><code>HOOKS=(base udev autodetect consolefont modconf block keymap lvm2 filesystems fsck keyboard ykfde)
 </code></pre>
@@ -645,6 +641,8 @@ boot parition password to see the GRUB boot menu and after that the YubiKey pass
 the root partition.</p>
 <p>Good luck! Don't worry if something doesn't work, simply boot from the Arch Linux medium, install the necessary software
 to mount your encrypted partitions and check the configs. Maybe an UUID is wrong.</p>
+<p>Now you can setup your Arch Linux e.g. create own user or add additional stuff <a href="https://wiki.archlinux.org/index.php/installation_guide">en</a> / <a href="https://wiki.archlinux.de/title/Anleitung_f%C3%BCr_Einsteiger">de</a>.
+The next chapter describes how to setup UEFI secure boot. The last piece to bullet proof your full disk encryption.</p>
 </div>        </div>
     </div>
 </div>
