@@ -25,7 +25,13 @@ You should be familiar with linux and should be able to edit files with `vi` [Vi
 You need an USB stick for the Linux Live environment and a second computer would be useful for look ups and to read this guide while
 preparing your fully encrypted Linux.
 
-And of cource you will need an [YubiKey](https://www.yubico.com/products/yubikey-hardware/ "Discover YubiKeys").
+And of course you will need an [YubiKey](https://www.yubico.com/products/yubikey-hardware/ "Discover YubiKeys").
+
+## Support this guide
+
+- Star [this project](https://github.com/sandrokeil/yubikey-full-disk-encryption-secure-boot-uefi "YubiKey Full Disk Encryption Repository") on GitHub
+- Spread this guide, so everyone can use it
+- Help to improve this guide, [create an issue](https://github.com/sandrokeil/yubikey-full-disk-encryption-secure-boot-uefi/issues "Create a new issue")
 
 ## Documentation
 
