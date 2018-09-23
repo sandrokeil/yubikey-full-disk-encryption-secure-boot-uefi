@@ -487,7 +487,13 @@ in your Arch Linux Live environment. This is needed because we will format the 4
 make install
 </code></pre>
 <h2 id="3-1-3-2">Prepare 2nd slot</h2>
-<p>Now it's time to prepare the second slot of your YubiKey for the challenge response authentication. Touch will be also enabled.</p>
+<p>Now it's time to prepare the second slot of your YubiKey for the <a href="https://wiki.archlinux.org/index.php/yubikey#Challenge-Response" title="Setup YubiKey Challenge-Response">challenge response authentication</a>.
+Touch will be also enabled. You can also install the package <code>yubikey-personalization-gui</code>. It allows for customization of the secret key,
+creation of secret key backup and writing the same secret key to multiple YubiKeys which allows for using them interchangeably for creating
+same <em>ykfde</em> passphrases.</p>
+<blockquote>
+<p>Securely save the 20 byte length secret key from the output, so you can use it to initialize another YubiKey as backup.</p>
+</blockquote>
 <pre><code>ykpersonalize -v -2 -ochal-resp -ochal-hmac -ohmac-lt64 -ochal-btn-trig -oserial-api-visible
 </code></pre>
 <h2 id="3-1-3-3">Configure ykfde</h2>
