@@ -13,7 +13,12 @@ make install
 
 
 ## Prepare 2nd slot
-Now it's time to prepare the second slot of your YubiKey for the challenge response authentication. Touch will be also enabled.
+Now it's time to prepare the second slot of your YubiKey for the [challenge response authentication](https://wiki.archlinux.org/index.php/yubikey#Challenge-Response "Setup YubiKey Challenge-Response"). 
+Touch will be also enabled. You can also install the package `yubikey-personalization-gui`. It allows for customization of the secret key, 
+creation of secret key backup and writing the same secret key to multiple YubiKeys which allows for using them interchangeably for creating 
+same *ykfde* passphrases.
+
+> Securely save the 20 byte length secret key from the output, so you can use it to initialize another YubiKey as backup.
 
 ```
 ykpersonalize -v -2 -ochal-resp -ochal-hmac -ohmac-lt64 -ochal-btn-trig -oserial-api-visible

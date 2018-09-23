@@ -75,7 +75,7 @@ sed -i "s/#YKFDE_CHALLENGE=/YKFDE_CHALLENGE=$YKFDE_CHALLENGE/g" /etc/ykde.conf
 Check that the YubiKey challenge was successfully saved to `/etc/ykde.conf` with `cat /etc/ykde.conf`.
 
 ## mkinitcpio
-The next step is to prepare the `mkinitcpio.conf` to encrypt the partition at boot. Open the file with 
+The next step is to prepare the `mkinitcpio.conf` to detect and unlock an encrypted partition at boot. Open the file with 
 `vi /etc/mkinitcpio.conf` and replace the *HOOKS* line with the following content.
 
 > Don't add `encrypt` hook, because we ues ykfde and respect the order !!!
