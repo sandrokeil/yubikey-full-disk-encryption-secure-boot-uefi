@@ -441,6 +441,21 @@
             </ul>
 
     </li>
+                        <li>
+    <a href="https://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/security/">Security</a>
+    
+    <ul class="dropdown-menu">
+                        <li>
+    <a href="https://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/security/disable-intel-amt.html">Disable INTEL AMT</a>
+
+    </li>
+                        <li>
+    <a href="https://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/security/disable-amd-psp.html">Disable AMD PSP</a>
+
+    </li>
+            </ul>
+
+    </li>
             </ul>
 
         </div>
@@ -514,7 +529,7 @@ after the <em>pam_unix.so</em> line.</p>
 <pre><code>#%PAM-1.0
 
 auth      required  pam_unix.so     try_first_pass nullok
-auth      required  pam_yubico.so   mode=challenge-response chalresp_path=/var/yubico 
+auth      required  pam_yubico.so   mode=challenge-response chalresp_path=/var/yubico
 auth      optional  pam_permit.so
 auth      required  pam_env.so
 
@@ -543,6 +558,7 @@ following goals which is really awesome!</p>
 </ul>
 <p>If you have any suggestions don't hesitate to <a href="https://github.com/sandrokeil/yubikey-full-disk-encryption-secure-boot-uefi/issues" title="Create a new issue">create an issue</a> to improve this guide.
 Also spread the word about this guide so more people can secure their system.</p>
+<p>You should now check the <em>security</em> chapter to improve security further.</p>
 </div>        </div>
     </div>
 </div>
@@ -554,7 +570,7 @@ Also spread the word about this guide so more people can secure their system.</p
                 <div class="prev col-xs-6">
                                             <a href="https://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/secure-boot.html">Previous</a>                                    </div>
                 <div class="next col-xs-6">
-                                    </div>
+                                            <a href="https://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/security/">Next</a>                                    </div>
             </div>
         </div>
     </div>

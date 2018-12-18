@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
 <meta name="HandheldFriendly" content="True"/>
-<title>Prepare YubiKey</title>
+<title>Disable AMD PSP</title>
     <link rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/cerulean/bootstrap.min.css">
 <link rel="stylesheet"
@@ -465,9 +465,8 @@
 <div class="container">
     <ol class="breadcrumb">
                         <li><a href="https://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/">YubiKey Full Disk Encryption Guide</a></li>
-                                <li><a href="https://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/">YFDE Guides</a></li>
-                                <li><a href="https://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/">YKFDE Guide for Arch Linux</a></li>
-                                <li class="active">Prepare YubiKey</li>
+                                <li><a href="https://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/security/">Security</a></li>
+                                <li class="active">Disable AMD PSP</li>
             </ol>
     <div class="row">
 
@@ -475,97 +474,29 @@
             <nav class="nav-left hidden-xs hidden-sm" id="sideNav">
     <ul class="nav nav-stacked" data-spy="affix" data-offset-top="59" role="tablist">
                                 <li>
-                <a href="#3-1-3" title="Prepare&#x20;YubiKey">Prepare YubiKey</a>
+                <a href="#4-2" title="Disable&#x20;AMD&#x20;PSP">Disable AMD PSP</a>
             </li>
                                 <li>
-                <a href="#3-1-3-1" title="Installation">Installation</a>
-            </li>
-                                <li>
-                <a href="#3-1-3-2" title="Prepare&#x20;2nd&#x20;slot">Prepare 2nd slot</a>
-            </li>
-                                <li>
-                <a href="#3-1-3-3" title="Configure&#x20;ykfde">Configure ykfde</a>
-            </li>
-                                <li>
-                <a href="#3-1-3-4" title="Encrypt&#x20;4th&#x20;partition">Encrypt 4th partition</a>
+                <a href="#4-2-1" title="Disable&#x20;AMD&#x20;PSP&#x20;in&#x20;BIOS">Disable AMD PSP in BIOS</a>
             </li>
             </ul>
 </nav>
         </div>
                 <div class="col-md-9">
-<div id="section-main"><h1 id="3-1-3">Prepare YubiKey</h1>
-<p>Download or mount <a href="https://github.com/agherzan/yubikey-full-disk-encryption">yubikey-full-disk-encryption</a> and install it
-in your Arch Linux Live environment. This is needed because we will format the 4th partition with YubiKey.</p>
-<h2 id="3-1-3-1">Installation</h2>
-<p>Open the <em>yubikey-full-disk-encryption</em> folder and run <code>make</code>.</p>
-<pre><code>cd yubikey-full-disk-encryption
-make install
-</code></pre>
-<h2 id="3-1-3-2">Prepare 2nd slot</h2>
-<p>Now it's time to prepare the second slot of your YubiKey for the <a href="https://wiki.archlinux.org/index.php/yubikey#Challenge-Response" title="Setup YubiKey Challenge-Response">challenge response authentication</a>.
-Touch will be also enabled. You can also install the package <code>yubikey-personalization-gui</code>. It allows for customization of the secret key,
-creation of secret key backup and writing the same secret key to multiple YubiKeys which allows for using them interchangeably for creating
-same <em>ykfde</em> passphrases.</p>
+<div id="section-main"><h1 id="4-2">Disable AMD PSP</h1>
+<p>This page describes how to disable AMD Secure Processor aka AMD Secure Technology.
+Please read the whole page before you begin. The AMD PSP is a
+<a href="https://www.scmagazineuk.com/security-issue-found-amds-platform-security-processor/article/1473518" title="Security issue found in AMD's Platform Security Processor">security risk</a>.</p>
 <blockquote>
-<p>Securely save the 20 byte length secret key from the output, so you can use it to initialize another YubiKey as backup.</p>
+<p>Don't forget to set a secure BIOS supervisor password!</p>
 </blockquote>
-<pre><code>ykpersonalize -v -2 -ochal-resp -ochal-hmac -ohmac-lt64 -ochal-btn-trig -oserial-api-visible
-</code></pre>
-<h2 id="3-1-3-3">Configure ykfde</h2>
-<p>Open <code>/etc/ykfde.conf</code> and set <code>YKFDE_CHALLENGE_SLOT=2</code> because we want to use the second slot.
-Set <code>YKFDE_CHALLENGE_PASSWORD_NEEDED=1</code> so it asks for the password (2FA). Leave other settings as is, it will be changed
-later.</p>
+<h2 id="4-2-1">Disable AMD PSP in BIOS</h2>
 <blockquote>
-<p>Please compare it carefully with the latest version you have downloaded.</p>
+<p><strong>Attention:</strong> If you don't see any option to disable AMD PSP, check
+if you have installed the latest BIOS version.</p>
 </blockquote>
-<pre><code class="language-ini"># Configuration for yubikey-full-disk-encryption. ("") means an empty value.
-
-### *REQUIRED* ###
-
-# Set to non-empty value to use 'Automatic mode with stored challenge (1FA)'.
-#YKFDE_CHALLENGE=""
-
-# Use 'Manual mode with secret challenge (2FA)'.
-YKFDE_CHALLENGE_PASSWORD_NEEDED="1"
-
-# Choose YubiKey slot configured for 'HMAC-SHA1 Challenge-Response' mode. Possible values are "1" or "2".
-YKFDE_CHALLENGE_SLOT="2"
-
-### OPTIONAL ###
-
-# Set partition UUID. Leave empty to use 'cryptdevice' kernel parameter.
-#YKFDE_DISK_UUID=""
-
-# Set LUKS encrypted volume name. Leave empty to use 'cryptdevice' kernel parameter.
-#YKFDE_LUKS_NAME=""
-
-# If left empty this will be set as "/dev/disk/by-uuid/$YKFDE_DISK_UUID" -- device to unlock with 'cryptsetup luksOpen'.
-#YKFDE_LUKS_DEV=""
-
-# Optional flags passed to 'cryptsetup luksOpen'. Example: "--allow-discards" for TRIM support. Leave empty to use cryptdevice kernel parameter.
-#YKFDE_LUKS_OPTIONS=""
-
-# Number of times to assemble passphrase and run 'cryptsetup luksOpen'. Defaults to "5".
-#YKFDE_CRYPTSETUP_TRIALS="5"
-
-# Number of seconds to wait for inserting YubiKey, "-1" means 'unlimited'. Defaults to "30".
-#YKFDE_CHALLENGE_YUBIKEY_INSERT_TIMEOUT="30"
-
-# Number of seconds passed to 'sleep' after succesful decryption. Defaults to empty, meaning NO sleep.
-#YKFDE_SLEEP_AFTER_SUCCESSFUL_CRYPTSETUP=""
-
-# Enable verbose output. It will print all secrets to terminal. Use only for debugging.
-#DBG="1"
-</code></pre>
-<h2 id="3-1-3-4">Encrypt 4th partition</h2>
-<p>Next step is to format the 4th partition. You can modify the arguments if you know what you are doing.</p>
-<blockquote>
-<p>Ensure that you use the 4th partition, replace <code>[device 4th partition]</code> with the 4th partition of your device e.g. <code>nvme0n1p4</code></p>
-</blockquote>
-<pre><code>ykfde-format --cipher aes-xts-plain64 --key-size 512 --hash sha256 --iter-time 5000 --type luks2 /dev/[device 4th partition]
-ykfde-open -d /dev/[device 4th partition] -n cryptlvm
-</code></pre>
-<p>Display the crypt volume with <code>ls -la /dev/mapper/</code>. Next step is to prepare the logical volumes.</p>
+<p>Boot into BIOS and search for an entry <em>BIOS PSP Support</em> and disable it.
+It should be in menu <em>Advanced</em>.</p>
 </div>        </div>
     </div>
 </div>
@@ -575,9 +506,9 @@ ykfde-open -d /dev/[device 4th partition] -n cryptlvm
         <div class="container">
             <div class="row">
                 <div class="prev col-xs-6">
-                                            <a href="https://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/prepare-disk.html">Previous</a>                                    </div>
+                                            <a href="https://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/security/disable-intel-amt.html">Previous</a>                                    </div>
                 <div class="next col-xs-6">
-                                            <a href="https://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/prepare-volumes.html">Next</a>                                    </div>
+                                    </div>
             </div>
         </div>
     </div>
