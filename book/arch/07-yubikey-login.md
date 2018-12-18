@@ -50,7 +50,7 @@ The complete file should look something like this.
 #%PAM-1.0
 
 auth      required  pam_unix.so     try_first_pass nullok
-auth      required  pam_yubico.so   mode=challenge-response chalresp_path=/var/yubico 
+auth      required  pam_yubico.so   mode=challenge-response chalresp_path=/var/yubico
 auth      optional  pam_permit.so
 auth      required  pam_env.so
 
@@ -67,11 +67,11 @@ session   optional  pam_permit.so
 ```
 
 ## Test it
-Arch Linux loads the [PAM](https://wiki.archlinux.org/index.php/PAM "Linux Pluggable Authentication Modules (PAM) ") config files on every login. So simply switch to 
+Arch Linux loads the [PAM](https://wiki.archlinux.org/index.php/PAM "Linux Pluggable Authentication Modules (PAM) ") config files on every login. So simply switch to
 another tty and try to login. After you have entered your password, the YubiKey should flash and you have to touch the
 YubiKey button. Good luck!
 
-**Congratulations**! You have hopefully successful finished the YubiKey Full Disk Encryption Guide. You have reached the 
+**Congratulations**! You have hopefully successful finished the YubiKey Full Disk Encryption Guide. You have reached the
 following goals which is really awesome!
 
 - YubiKey encrypted `root (/)` and `home (/home)` folder on separated partitions
@@ -81,3 +81,5 @@ following goals which is really awesome!
 
 If you have any suggestions don't hesitate to [create an issue](https://github.com/sandrokeil/yubikey-full-disk-encryption-secure-boot-uefi/issues "Create a new issue") to improve this guide.
 Also spread the word about this guide so more people can secure their system.
+
+You should now check the *security* chapter to improve security further.

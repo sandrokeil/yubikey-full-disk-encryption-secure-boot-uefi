@@ -1,10 +1,8 @@
 {
-    "title": "YubiKey Full Disk Encryption Guide",
+    "title": "Security",
     "content": [
-        {"intro": "README.md"},
-        {"changelog": "CHANGELOG.md"},
-        {"guides": "book/guides/bookdown.json"},
-        {"security": "book/security/bookdown.json"}
+        {"disable-intel-amt": "disable-intel-amt.md"},
+        {"disable-amd-psp": "disable-amd-psp.md"}
     ],
     "theme": {
         "toc": {
@@ -13,7 +11,7 @@
     },
     "template": "bookdown/themes",
     "tocDepth": 2,
-    "target": "./html",
+    "target": "../html",
     "numbering": false,
     "extensions": {
         "commonmark": [

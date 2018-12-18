@@ -1,7 +1,7 @@
 # YubiKey Full Disk Encryption
 
-[This repository](https://github.com/sandrokeil/yubikey-full-disk-encryption-secure-boot-uefi "YubiKey Full Disk Encryption Repository") 
-contains a step-by-step tutorial to create a full disk encryption setup with two factor authentication (2FA) 
+[This repository](https://github.com/sandrokeil/yubikey-full-disk-encryption-secure-boot-uefi "YubiKey Full Disk Encryption Repository")
+contains a step-by-step tutorial to create a full disk encryption setup with two factor authentication (2FA)
 via [YubiKey](https://yubico.com/products/yubikey-hardware/). It contains:
 
 - YubiKey encrypted `root (/)` and `home (/home)` folder on separated partitions
@@ -11,11 +11,16 @@ via [YubiKey](https://yubico.com/products/yubikey-hardware/). It contains:
 
 Currently guides for:
 
-- Arch Linux 
+- Arch Linux
+
+Additional security chapter:
+
+- Disable INTEL AMT
+- Disable AMD PSP
 
 ## Why
 It took me several days to figure out how to set up a fully encrypted machine with 2FA. This guide should help
-others to get it done in minutes (hopefully). There exists a plenty bunch of tutorials but no one contains a step-by-step 
+others to get it done in minutes (hopefully). There exists a plenty bunch of tutorials but no one contains a step-by-step
 guide to get the above things done.
 
 > I guess the entire manual will take between 1 - 3 hours.
@@ -25,7 +30,7 @@ You should be familiar with linux and should be able to edit files with `vi` [Vi
 You need an USB stick for the Linux Live environment and a second computer would be useful for look ups and to read this guide while
 preparing your fully encrypted Linux.
 
-And of course you will need at least **two** [YubiKeys](https://www.yubico.com/products/yubikey-hardware/ "Discover YubiKeys").  
+And of course you will need at least **two** [YubiKeys](https://www.yubico.com/products/yubikey-hardware/ "Discover YubiKeys").
 
 **WARNING:** You gonna get a bricked machine if you only have a single Yubikey and it breaks.
 
@@ -38,7 +43,7 @@ And of course you will need at least **two** [YubiKeys](https://www.yubico.com/p
 ## Documentation
 
 For the latest online documentation visit [http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/](http://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/ "Latest yubikey-full-disk-encryption-secure-boot-uefi documentation").
-Refer the *Quick Start* section for a detailed explanation. 
+Refer the *Quick Start* section for a detailed explanation.
 
 Documentation is [in the book tree](book/), and can be compiled using [bookdown](http://bookdown.io) or [Docker](https://www.docker.com/)
 

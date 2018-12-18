@@ -7,7 +7,7 @@
     "authors": [
         {
             "name": "Sandro Keil",
-            "email": "social@sandro-keil.de",
+            "email": "github@sandro-keil.de",
             "homepage": "https://sandro-keil.de"
         }
     ],
@@ -19,7 +19,10 @@
         "uefi",
         "arch-linux",
         "luks",
-        "lvm2"
+        "lvm2",
+        "security",
+        "intel amt",
+        "amd psp"
     ],
     "require": {
         "bookdown/bookdown": "^1.1.0",
