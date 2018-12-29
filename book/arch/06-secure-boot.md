@@ -1,6 +1,8 @@
 # Setup secure boot
 
-This chapter describes how to configure secure boot because no one should modify the bootloader or boot from another medium. 
+> You can use the file `scripts/arch/06-secure-boot.sh`.
+
+This chapter describes how to configure secure boot because no one should modify the bootloader or boot from another medium.
 Gerke Max Preussner describes this very detailed in his post [Fully Encrypted ArchLinux with Secure Boot on Yoga 920](https://gmpreussner.com/reference/fully-encrypted-archlinux-with-secure-boot-on-yoga-920?#secureboot)
 Please read his chapter about secure boot and come back to enable it.
 
@@ -57,7 +59,7 @@ Exec = /usr/bin/cryptboot update-grub
 
 ## Enable UEFI secure boot
 If you encountered no errors you can now enable UEFI secure boot. Restart the computer and enter BIOS setup.
-                                                                  
+
 1. Navigate to the **Security** page
 1. Go to **Secure Boot** and enable it
 1. Save the changes and exit BIOS Setup

@@ -1,7 +1,9 @@
 # Getting Started
 
+> You can use the file `scripts/arch/01-init.sh`
+
 For common stuff, the Arch Wiki is a good starting point. You need a bootable Arch Linux medium. Please take a look
-at the Arch installation guide [en](https://wiki.archlinux.org/index.php/installation_guide#Pre-installation "Download and boot the installation medium") / [de](https://wiki.archlinux.de/title/Anleitung_für_Einsteiger#Das_neueste_ISO-Abbild_beziehen "Das neueste ISO-Abbild beziehen"). 
+at the Arch installation guide [en](https://wiki.archlinux.org/index.php/installation_guide#Pre-installation "Download and boot the installation medium") / [de](https://wiki.archlinux.de/title/Anleitung_für_Einsteiger#Das_neueste_ISO-Abbild_beziehen "Das neueste ISO-Abbild beziehen").
 
 Ok, you've create a bootable Arch Linux medium, now it's time to boot into the Arch Linux UEFI system.
 

@@ -1,5 +1,7 @@
 # Prepare Volumes
 
+> You can use the file `scripts/arch/04-prepare-volumes.sh`
+
 Please take a look at the Arch Wiki page [Preparing the logical volumes](https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Preparing_the_logical_volumes "preparing the logical volumes")
 to create `/` and `/home` directory/partitions. In short you do this (without swap).
 
@@ -9,7 +11,7 @@ to create `/` and `/home` directory/partitions. In short you do this (without sw
 pvcreate /dev/mapper/cryptlvm
 vgcreate MyVolGroup /dev/mapper/cryptlvm
 
-lvcreate -L 30G MyVolGroup -n root
+lvcreate -L 20G MyVolGroup -n root
 lvcreate -l 100%FREE MyVolGroup -n home
 
 mkfs.ext4 /dev/MyVolGroup/root
@@ -26,10 +28,13 @@ The last volume is `/boot` which should also be encrypted. You can not use a Yub
 The Arch Wiki page [Preparing the boot partition](https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Preparing_the_boot_partition_5 "Preparing the boot partition")
 describes this in more detail. The `efi` partition will be mounted to `/boot/efi`.
 
-> Be aware, GRUB boot loader uses US keyboard layout. Consider this for your password!
-
 Execute the following commands and replace `[device 3rd partition]` with the 3rd partition of your device e.g. `nvme0n1p3`
 and replace `[device 2nd partition]` with the 2nd partition of your device e.g. `nvme0n1p2`.
+
+The command `cryptsetup luksFormat` will prompt to enter your password to decrypt the boot partition at boot.
+Use a strong password which you can remember.
+
+> Be aware, GRUB boot loader uses US keyboard layout. German users should execute `loadkeys us` before running `cryptsetup` commands.
 
 ```
 cryptsetup luksFormat /dev/[device 3rd partition]
@@ -58,3 +63,5 @@ dd bs=512 count=4 if=/dev/urandom of=/mnt/crypto_keyfile.bin
 chmod 000 /mnt/crypto_keyfile.bin
 cryptsetup luksAddKey /dev/[device 3rd partition] /mnt/crypto_keyfile.bin
 ```
+
+Now it's time to install Arch. You have made a great progress!
