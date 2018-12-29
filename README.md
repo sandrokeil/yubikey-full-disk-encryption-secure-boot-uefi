@@ -11,7 +11,7 @@ via [YubiKey](https://yubico.com/products/yubikey-hardware/). It contains:
 
 Currently guides for:
 
-- Arch Linux
+- Arch Linux with helper scripts
 
 Additional security chapter:
 
