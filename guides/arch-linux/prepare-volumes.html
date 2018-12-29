@@ -488,6 +488,9 @@
         </div>
                 <div class="col-md-9">
 <div id="section-main"><h1 id="3-1-4">Prepare Volumes</h1>
+<blockquote>
+<p>You can use the file <code>scripts/arch/04-prepare-volumes.sh</code></p>
+</blockquote>
 <p>Please take a look at the Arch Wiki page <a href="https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Preparing_the_logical_volumes" title="preparing the logical volumes">Preparing the logical volumes</a>
 to create <code>/</code> and <code>/home</code> directory/partitions. In short you do this (without swap).</p>
 <blockquote>
@@ -496,7 +499,7 @@ to create <code>/</code> and <code>/home</code> directory/partitions. In short y
 <pre><code>pvcreate /dev/mapper/cryptlvm
 vgcreate MyVolGroup /dev/mapper/cryptlvm
 
-lvcreate -L 30G MyVolGroup -n root
+lvcreate -L 20G MyVolGroup -n root
 lvcreate -l 100%FREE MyVolGroup -n home
 
 mkfs.ext4 /dev/MyVolGroup/root
@@ -510,11 +513,13 @@ mount /dev/MyVolGroup/home /mnt/home
 <p>The last volume is <code>/boot</code> which should also be encrypted. You can not use a YubiKey here, but it is protected with a password.
 The Arch Wiki page <a href="https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Preparing_the_boot_partition_5" title="Preparing the boot partition">Preparing the boot partition</a>
 describes this in more detail. The <code>efi</code> partition will be mounted to <code>/boot/efi</code>.</p>
-<blockquote>
-<p>Be aware, GRUB boot loader uses US keyboard layout. Consider this for your password!</p>
-</blockquote>
 <p>Execute the following commands and replace <code>[device 3rd partition]</code> with the 3rd partition of your device e.g. <code>nvme0n1p3</code>
 and replace <code>[device 2nd partition]</code> with the 2nd partition of your device e.g. <code>nvme0n1p2</code>.</p>
+<p>The command <code>cryptsetup luksFormat</code> will prompt to enter your password to decrypt the boot partition at boot.
+Use a strong password which you can remember.</p>
+<blockquote>
+<p>Be aware, GRUB boot loader uses US keyboard layout. German users should execute <code>loadkeys us</code> before running <code>cryptsetup</code> commands.</p>
+</blockquote>
 <pre><code>cryptsetup luksFormat /dev/[device 3rd partition]
 cryptsetup open /dev/[device 3rd partition] cryptboot
 
@@ -537,6 +542,7 @@ The keyfile is copied in the root folder of the new Arch linux environment.</p>
 chmod 000 /mnt/crypto_keyfile.bin
 cryptsetup luksAddKey /dev/[device 3rd partition] /mnt/crypto_keyfile.bin
 </code></pre>
+<p>Now it's time to install Arch. You have made a great progress!</p>
 </div>        </div>
     </div>
 </div>

@@ -494,6 +494,9 @@
         </div>
                 <div class="col-md-9">
 <div id="section-main"><h1 id="3-1-3">Prepare YubiKey</h1>
+<blockquote>
+<p>You can use the file <code>scripts/arch/03-ykfde.sh</code>.</p>
+</blockquote>
 <p>Download or mount <a href="https://github.com/agherzan/yubikey-full-disk-encryption">yubikey-full-disk-encryption</a> and install it
 in your Arch Linux Live environment. This is needed because we will format the 4th partition with YubiKey.</p>
 <h2 id="3-1-3-1">Installation</h2>
@@ -503,14 +506,15 @@ make install
 </code></pre>
 <h2 id="3-1-3-2">Prepare 2nd slot</h2>
 <p>Now it's time to prepare the second slot of your YubiKey for the <a href="https://wiki.archlinux.org/index.php/yubikey#Challenge-Response" title="Setup YubiKey Challenge-Response">challenge response authentication</a>.
-Touch will be also enabled. You can also install the package <code>yubikey-personalization-gui</code>. It allows for customization of the secret key,
+Touch will be also enabled. You can also install the package <a href="https://www.kryptel.com/articles/yubikey_setup.php"><code>yubikey-personalization-gui</code></a>. It allows for customization of the secret key,
 creation of secret key backup and writing the same secret key to multiple YubiKeys which allows for using them interchangeably for creating
 same <em>ykfde</em> passphrases.</p>
 <blockquote>
-<p>Securely save the 20 byte length secret key from the output, so you can use it to initialize another YubiKey as backup.</p>
+<p>Securely save the 20 byte length secret <strong>key</strong> from the output, so you can use it to initialize another YubiKey as backup.</p>
 </blockquote>
 <pre><code>ykpersonalize -v -2 -ochal-resp -ochal-hmac -ohmac-lt64 -ochal-btn-trig -oserial-api-visible
 </code></pre>
+<p>The output contains the secret <strong>key</strong> e.g. <code>7fb21c407f0693ab30259664680a047f8c462ccb</code> to replace a faulty YubiKey.</p>
 <h2 id="3-1-3-3">Configure ykfde</h2>
 <p>Open <code>/etc/ykfde.conf</code> and set <code>YKFDE_CHALLENGE_SLOT=2</code> because we want to use the second slot.
 Set <code>YKFDE_CHALLENGE_PASSWORD_NEEDED=1</code> so it asks for the password (2FA). Leave other settings as is, it will be changed
@@ -518,7 +522,9 @@ later.</p>
 <blockquote>
 <p>Please compare it carefully with the latest version you have downloaded.</p>
 </blockquote>
-<pre><code class="language-ini"># Configuration for yubikey-full-disk-encryption. ("") means an empty value.
+<pre><code class="language-ini">### Configuration for 'yubikey-full-disk-encryption'.
+### Remove hash (#) symbol and set non-empty ("") value for chosen options to
+### enable them.
 
 ### *REQUIRED* ###
 
@@ -526,35 +532,45 @@ later.</p>
 #YKFDE_CHALLENGE=""
 
 # Use 'Manual mode with secret challenge (2FA)'.
-YKFDE_CHALLENGE_PASSWORD_NEEDED="1"
+#YKFDE_CHALLENGE_PASSWORD_NEEDED="1"
 
-# Choose YubiKey slot configured for 'HMAC-SHA1 Challenge-Response' mode. Possible values are "1" or "2".
-YKFDE_CHALLENGE_SLOT="2"
+# YubiKey slot configured for 'HMAC-SHA1 Challenge-Response' mode.
+# Possible values are "1" or "2". Defaults to "2".
+#YKFDE_CHALLENGE_SLOT="2"
 
 ### OPTIONAL ###
 
-# Set partition UUID. Leave empty to use 'cryptdevice' kernel parameter.
+# UUID of device to unlock with 'cryptsetup'.
+# Leave empty to use 'cryptdevice' boot parameter.
 #YKFDE_DISK_UUID=""
 
-# Set LUKS encrypted volume name. Leave empty to use 'cryptdevice' kernel parameter.
+# LUKS encrypted volume name after unlocking.
+# Leave empty to use 'cryptdevice' boot parameter.
 #YKFDE_LUKS_NAME=""
 
-# If left empty this will be set as "/dev/disk/by-uuid/$YKFDE_DISK_UUID" -- device to unlock with 'cryptsetup luksOpen'.
+# Device to unlock with 'cryptsetup'. If left empty and 'YKFDE_DISK_UUID'
+# is enabled this will be set as "/dev/disk/by-uuid/$YKFDE_DISK_UUID".
+# Leave empty to use 'cryptdevice' boot parameter.
 #YKFDE_LUKS_DEV=""
 
-# Optional flags passed to 'cryptsetup luksOpen'. Example: "--allow-discards" for TRIM support. Leave empty to use cryptdevice kernel parameter.
+# Optional flags passed to 'cryptsetup'. Example: "--allow-discards" for TRIM
+# support. Leave empty to use 'cryptdevice' boot parameter.
 #YKFDE_LUKS_OPTIONS=""
 
-# Number of times to assemble passphrase and run 'cryptsetup luksOpen'. Defaults to "5".
+# Number of times to try assemble 'ykfde passphrase' and run 'cryptsetup'.
+# Defaults to "5".
 #YKFDE_CRYPTSETUP_TRIALS="5"
 
-# Number of seconds to wait for inserting YubiKey, "-1" means 'unlimited'. Defaults to "30".
+# Number of seconds to wait for inserting YubiKey, "-1" means 'unlimited'.
+# Defaults to "30".
 #YKFDE_CHALLENGE_YUBIKEY_INSERT_TIMEOUT="30"
 
-# Number of seconds passed to 'sleep' after succesful decryption. Defaults to empty, meaning NO sleep.
+# Number of seconds to wait after successful decryption.
+# Defaults to empty, meaning NO wait.
 #YKFDE_SLEEP_AFTER_SUCCESSFUL_CRYPTSETUP=""
 
-# Enable verbose output. It will print all secrets to terminal. Use only for debugging.
+# Verbose output. It will print all secrets to terminal.
+# Use only for debugging.
 #DBG="1"
 </code></pre>
 <h2 id="3-1-3-4">Encrypt 4th partition</h2>
@@ -562,6 +578,9 @@ YKFDE_CHALLENGE_SLOT="2"
 <blockquote>
 <p>Ensure that you use the 4th partition, replace <code>[device 4th partition]</code> with the 4th partition of your device e.g. <code>nvme0n1p4</code></p>
 </blockquote>
+<p>The command <code>ykfde-format</code> will prompt to enter your challenge (2FA) password. Use a strong password which you can remember.
+You have to type this password every time to get access via YubiKey and to decrypt your disk. The command <code>ykfde-open</code>
+will unlock a LUKS encrypted volume on a running system.</p>
 <pre><code>ykfde-format --cipher aes-xts-plain64 --key-size 512 --hash sha256 --iter-time 5000 --type luks2 /dev/[device 4th partition]
 ykfde-open -d /dev/[device 4th partition] -n cryptlvm
 </code></pre>
