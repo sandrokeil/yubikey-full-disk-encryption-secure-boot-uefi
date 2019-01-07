@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
 <meta name="HandheldFriendly" content="True"/>
-<title>Enable YubiKey Login</title>
+<title>Replace a faulty YubiKey</title>
     <link rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/cerulean/bootstrap.min.css">
 <link rel="stylesheet"
@@ -471,7 +471,8 @@
                         <li><a href="https://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/">YubiKey Full Disk Encryption Guide</a></li>
                                 <li><a href="https://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/">YFDE Guides</a></li>
                                 <li><a href="https://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/">YKFDE Guide for Arch Linux</a></li>
-                                <li class="active">Enable YubiKey Login</li>
+                                <li><a href="https://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/yubikey-recovery/">YubiKey Recovery</a></li>
+                                <li class="active">Replace a faulty YubiKey</li>
             </ol>
     <div class="row">
 
@@ -479,93 +480,27 @@
             <nav class="nav-left hidden-xs hidden-sm" id="sideNav">
     <ul class="nav nav-stacked" data-spy="affix" data-offset-top="59" role="tablist">
                                 <li>
-                <a href="#3-1-7" title="Enable&#x20;YubiKey&#x20;Login">Enable YubiKey Login</a>
-            </li>
-                                <li>
-                <a href="#3-1-7-1" title="Challenge&#x20;response&#x20;authentication&#x20;setup">Challenge response authe...</a>
-            </li>
-                                <li>
-                <a href="#3-1-7-2" title="Activation">Activation</a>
-            </li>
-                                <li>
-                <a href="#3-1-7-3" title="Test&#x20;it">Test it</a>
+                <a href="#3-1-8-1" title="Replace&#x20;a&#x20;faulty&#x20;YubiKey">Replace a faulty YubiKey</a>
             </li>
             </ul>
 </nav>
         </div>
                 <div class="col-md-9">
-<div id="section-main"><h1 id="3-1-7">Enable YubiKey Login</h1>
-<p>Alright, you have already setup full disk encryption with YubiKey but what good is this if anyone can log in without YubiKey?
-This chapter describes how to use the YubiKey for authentication inclusive <em>sudo</em>.</p>
+<div id="section-main"><h1 id="3-1-8-1">Replace a faulty YubiKey</h1>
 <blockquote>
-<p>Have you already created a new user? Don't use <em>root</em> user here.</p>
+<p>You will need the 20 byte length secret key from the initialization.</p>
 </blockquote>
-<h2 id="3-1-7-1">Challenge response authentication setup</h2>
-<p>You can read more about that in <a href="https://developers.yubico.com/yubico-pam/Authentication_Using_Challenge-Response.html">Local Authentication Using Challenge Response</a>.
-Let's install the needed package <em>yubico-pam</em>:</p>
-<pre><code>sudo pacman -S yubico-pam
+<p>The secret key in the example here is <em>7fb21c407f0693ab30259664680a047f8c462ccb</em>.</p>
+<pre><code>LOGGING START,3/9/2018 5:00 PM
+Challenge-Response: HMAC-SHA1,3/9/2018 5:00 PM,2,,,7fb21c407f0693ab30259664680a047f8c462ccb,,,0,0,0,0,0,0,0,0,0,0
 </code></pre>
-<p>Next step is to set the current user to require the YubiKey for logon with the following commands:</p>
+<p>Repalce <code>[Your secret key]</code> with your secret key from initialization.</p>
+<pre><code>ykpersonalize -a[your secret key] -v -2 -ochal-resp -ochal-hmac -ohmac-lt64 -ochal-btn-trig -oserial-api-visible
+</code></pre>
+<p>That's it, this YubiKey should work like the others.</p>
 <blockquote>
-<p>You have to do this for each YubiKey due initial challenge. Remember to touch the device if necessary.</p>
+<p>If you use YubiKey Login you have to reread chapter <em>07: Enable YubiKey Login</em> due initial challenge.</p>
 </blockquote>
-<pre><code>mkdir $HOME/.yubico
-ykpamcfg -2 -v
-</code></pre>
-<p>It is generally a good idea to move the challenge file in a system-wide path that is only read- and writable by root.</p>
-<blockquote>
-<p>It is important that the file is named with the name of the user that is going to be authenticated by this YubiKey.</p>
-</blockquote>
-<pre><code>sudo mkdir /var/yubico
-sudo chown root.root /var/yubico
-sudo chmod 700 /var/yubico
-
-sudo mv ~/.yubico/challenge-123456 /var/yubico/[username]-123456
-sudo chown root.root /var/yubico/[username]-123456
-sudo chmod 600 /var/yubico/[username]-123456
-</code></pre>
-<h2 id="3-1-7-2">Activation</h2>
-<p>Let's active the YubiKey for logon. For this open the file with <code>vi /etc/pam.d/system-auth</code> and add the following line
-after the <em>pam_unix.so</em> line.</p>
-<blockquote>
-<p>Please login to another tty in case of something goes wrong so you can deactivate it. Don't forget to become root.</p>
-</blockquote>
-<pre><code>auth   required        pam_yubico.so mode=challenge-response chalresp_path=/var/yubico
-</code></pre>
-<p>The complete file should look something like this.</p>
-<pre><code>#%PAM-1.0
-
-auth      required  pam_unix.so     try_first_pass nullok
-auth      required  pam_yubico.so   mode=challenge-response chalresp_path=/var/yubico
-auth      optional  pam_permit.so
-auth      required  pam_env.so
-
-account   required  pam_unix.so
-account   optional  pam_permit.so
-account   required  pam_time.so
-
-password  required  pam_unix.so     try_first_pass nullok sha512 shadow
-password  optional  pam_permit.so
-
-session   required  pam_limits.so
-session   required  pam_unix.so
-session   optional  pam_permit.so
-</code></pre>
-<h2 id="3-1-7-3">Test it</h2>
-<p>Arch Linux loads the <a href="https://wiki.archlinux.org/index.php/PAM" title="Linux Pluggable Authentication Modules (PAM) ">PAM</a> config files on every login. So simply switch to
-another tty and try to login. After you have entered your password, the YubiKey should flash and you have to touch the
-YubiKey button. Good luck!</p>
-<p><strong>Congratulations</strong>! You have hopefully successful finished the YubiKey Full Disk Encryption Guide. You have reached the
-following goals which is really awesome!</p>
-<ul>
-<li>YubiKey encrypted <code>root (/)</code> and <code>home (/home)</code> folder on separated partitions</li>
-<li>Encrypted <code>/boot</code> partition</li>
-<li>UEFI Secure boot (self signed boot loader)</li>
-<li>YubiKey authentication for user login</li>
-</ul>
-<p>If you have any suggestions don't hesitate to <a href="https://github.com/sandrokeil/yubikey-full-disk-encryption-secure-boot-uefi/issues" title="Create a new issue">create an issue</a> to improve this guide.
-Also spread the word about this guide so more people can secure their system.</p>
-<p>You should now check the <em>security</em> chapter to improve security further.</p>
 </div>        </div>
     </div>
 </div>
@@ -575,9 +510,9 @@ Also spread the word about this guide so more people can secure their system.</p
         <div class="container">
             <div class="row">
                 <div class="prev col-xs-6">
-                                            <a href="https://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/secure-boot.html">Previous</a>                                    </div>
+                                            <a href="https://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/yubikey-recovery/">Previous</a>                                    </div>
                 <div class="next col-xs-6">
-                                            <a href="https://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/yubikey-recovery/">Next</a>                                    </div>
+                                            <a href="https://sandrokeil.github.io/yubikey-full-disk-encryption-secure-boot-uefi/guides/arch-linux/yubikey-recovery/add-or-replace-luks-yubikey.html">Next</a>                                    </div>
             </div>
         </div>
     </div>
