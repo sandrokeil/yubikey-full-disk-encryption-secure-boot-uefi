@@ -1,19 +1,17 @@
 {
-    "title": "YubiKey Full Disk Encryption Guide",
+    "title": "YubiKey Recovery",
     "content": [
-        {"intro": "README.md"},
-        {"changelog": "CHANGELOG.md"},
-        {"guides": "book/guides/bookdown.json"},
-        {"security": "book/security/bookdown.json"}
+        {"replace-faulty-yubikey": "replace-faulty-yubikey.md"},
+        {"add-or-replace-luks-yubikey": "add-or-replace-luks-yubikey.md"}
     ],
     "theme": {
         "toc": {
-            "collapsibleFromLevel": 2
+            "collapsibleFromLevel": 1
         }
     },
     "template": "bookdown/themes",
     "tocDepth": 2,
-    "target": "./html",
+    "target": "../html",
     "numbering": false,
     "extensions": {
         "commonmark": [

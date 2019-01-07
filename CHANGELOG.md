@@ -1,5 +1,9 @@
 # Changelog
 
+## 2019-01-07
+
+- Add Arch recovery chapter to add or replace an YubiKey
+
 ## 2018-12-29
 
 - Add Arch helper scripts

@@ -15,6 +15,8 @@ sudo pacman -S yubico-pam
 
 Next step is to set the current user to require the YubiKey for logon with the following commands:
 
+> You have to do this for each YubiKey due initial challenge. Remember to touch the device if necessary.
+
 ```
 mkdir $HOME/.yubico
 ykpamcfg -2 -v
