@@ -524,7 +524,7 @@ Use a strong password which you can remember.</p>
 <blockquote>
 <p>Be aware, GRUB boot loader uses US keyboard layout. German users should execute <code>loadkeys us</code> before running <code>cryptsetup</code> commands.</p>
 </blockquote>
-<pre><code>cryptsetup luksFormat /dev/[device 3rd partition]
+<pre><code>cryptsetup luksFormat --type luks1 /dev/[device 3rd partition]
 cryptsetup open /dev/[device 3rd partition] cryptboot
 
 ls /dev/mapper
