@@ -35,6 +35,8 @@ later.
 
 > Please compare it carefully with the latest version you have downloaded.
 
+It should look something like this
+
 ```ini
 ### Configuration for 'yubikey-full-disk-encryption'.
 ### Remove hash (#) symbol and set non-empty ("") value for chosen options to
