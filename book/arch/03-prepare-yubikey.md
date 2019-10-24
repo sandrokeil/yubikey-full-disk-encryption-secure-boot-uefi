@@ -46,11 +46,11 @@ later.
 #YKFDE_CHALLENGE=""
 
 # Use 'Manual mode with secret challenge (2FA)'.
-#YKFDE_CHALLENGE_PASSWORD_NEEDED="1"
+YKFDE_CHALLENGE_PASSWORD_NEEDED="1"
 
 # YubiKey slot configured for 'HMAC-SHA1 Challenge-Response' mode.
 # Possible values are "1" or "2". Defaults to "2".
-#YKFDE_CHALLENGE_SLOT="2"
+YKFDE_CHALLENGE_SLOT="2"
 
 ### OPTIONAL ###
 
